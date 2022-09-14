@@ -14,6 +14,7 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -32,13 +33,14 @@ public class SignInController {
         this.authenticationManager = authenticationManager;
     }
 
-    @Operation(summary = "Hello Swagger Api", description = "Here it is implemented for demo purpose", tags = {"Demo Controller"})
+    @Operation(summary = "SignIn Api", description = "Here ,User have to enter username and password for SignIn purpose", tags = {"Demo Controller"})
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "User logged successfully"),
-            @ApiResponse(responseCode = "400", description = "Bad Request")
+            @ApiResponse(responseCode = "400", description = "Bad Request"),
+            @ApiResponse(responseCode = "404",description = "User not found/Forbidden")
     })
-    @GetMapping(value = "/signIn")
-    public String useSignIn(@RequestBody @Validated SignInRequest signInRequest, HttpServletResponse response) throws UsernameNotFoundException {
+    @PostMapping(value = "/signIn")
+    public String userSignIn(@RequestBody @Validated SignInRequest signInRequest, HttpServletResponse response) throws UsernameNotFoundException {
         JwtUtil jwtUtil = new JwtUtil();
         //try {
             UserDetails userDetails = customUserDetailsService.loadUserByUsername(signInRequest.getEmail());
