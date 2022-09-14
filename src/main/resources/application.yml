@@ -4,7 +4,7 @@ server:
 spring:
   datasource:
     driver-class-name: org.postgresql.Driver
-    url: jdbc:postgresql://localhost:5432/demo
+    url: jdbc:postgresql://localhost:5432/simform-invoicing-system?createDatabaseIfNotExist=true
     username: postgres
     password: Simform@123
   jpa:
