@@ -1,7 +1,10 @@
 package com.simform.invoicingsystem.filter;
 
 import com.simform.invoicingsystem.service.CustomUserDetailsService;
+import com.simform.invoicingsystem.util.CookieUtil;
 import com.simform.invoicingsystem.util.JwtUtil;
+import io.jsonwebtoken.ExpiredJwtException;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -12,12 +15,12 @@ import org.springframework.web.filter.OncePerRequestFilter;
 
 import javax.servlet.FilterChain;
 import javax.servlet.ServletException;
-import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 
 @Component
+@Slf4j
 public class JwtFilter extends OncePerRequestFilter {
 
     private CustomUserDetailsService customUserDetailsService;
@@ -28,23 +31,18 @@ public class JwtFilter extends OncePerRequestFilter {
 
     @Override
     protected void doFilterInternal(HttpServletRequest httpServletRequest, HttpServletResponse httpServletResponse, FilterChain filterChain) throws ServletException, IOException {
-        String authorizationHeader = null;
         JwtUtil jwtUtil = new JwtUtil();
-        Cookie[] cookies = httpServletRequest.getCookies();
-        if (cookies != null) {
-            for (Cookie c : cookies) {
-                if (c.getName().equals("token")) {
-                    authorizationHeader = c.getValue();
-                }
-            }
-        }
-
-        String token = null;
+        String token = CookieUtil.getCookieValueByName(httpServletRequest, "token");
         String userName = null;
 
-        if (authorizationHeader != null) {
-            token = authorizationHeader;
+        try {
             userName = jwtUtil.extractUsername(token);
+        } catch (IllegalArgumentException e) {
+            log.error("An error occurred while getting username from token: ", e);
+        } catch (ExpiredJwtException e) {
+            log.warn("The token is expired and not valid anymore: ", e);
+        } catch (Exception exception) {
+            log.error("An error occurred while processing authentication : ", exception);
         }
 
         if (userName != null && SecurityContextHolder.getContext().getAuthentication() == null) {
@@ -52,7 +50,7 @@ public class JwtFilter extends OncePerRequestFilter {
             try {
                 userDetails = customUserDetailsService.loadUserByUsername(userName);
             } catch (UsernameNotFoundException e) {
-                System.out.println(e.getMessage());
+                log.error("Error: ", e);
                 httpServletResponse.sendRedirect("/");
             }
             if (userDetails != null && jwtUtil.validateToken(token, userDetails)) {
@@ -67,3 +65,5 @@ public class JwtFilter extends OncePerRequestFilter {
         filterChain.doFilter(httpServletRequest, httpServletResponse);
     }
 }
+
+

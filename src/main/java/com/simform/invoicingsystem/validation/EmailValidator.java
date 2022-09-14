@@ -15,7 +15,7 @@ public class EmailValidator implements ConstraintValidator<EmailValidation, Stri
     Consecutive dots aren't allowed.
     For the local part, a maximum of 64 characters are allowed.
     */
-    final String regexPattern="^(?=.{1,64}@)[A-Za-z0-9_-]+(\\\\.[A-Za-z0-9_-]+)*@[^-][A-Za-z0-9-]+(\\\\.[A-Za-z0-9-]+)*(\\\\.[A-Za-z]{2,})$";
+    final String regexPattern = "^(?=.{1,64}@)[A-Za-z0-9_-]+(\\\\.[A-Za-z0-9_-]+)*@[^-][A-Za-z0-9-]+(\\\\.[A-Za-z0-9-]+)*(\\\\.[A-Za-z]{2,})$";
 
     @Override
     public void initialize(EmailValidation emailValidation) {

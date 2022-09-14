@@ -9,10 +9,12 @@ import java.lang.annotation.Target;
 
 
 @Constraint(validatedBy = EmailValidator.class)
-@Target({ ElementType.FIELD })
+@Target({ElementType.FIELD})
 @Retention(RetentionPolicy.RUNTIME)
 public @interface EmailValidation {
     String message() default "Invalid email id";
+
     Class<?>[] groups() default {};
+
     Class<? extends Payload>[] payload() default {};
 }
