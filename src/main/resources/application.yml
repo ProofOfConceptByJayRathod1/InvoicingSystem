@@ -15,4 +15,3 @@ spring:
     hibernate:
       show-sql: false
       ddl-auto: update
-    show-sql: false
