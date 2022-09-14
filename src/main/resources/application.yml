@@ -3,13 +3,16 @@ server:
 
 spring:
   datasource:
-    platform: mysql
-    username: root
-    password: root
-    url: jdbc:mysql://localhost:3306/invoicing-system?createDatabaseIfNotExist=true
-    jpa:
+    driver-class-name: org.postgresql.Driver
+    url: jdbc:postgresql://localhost:5432/demo
+    username: postgres
+    password: Simform@123
+  jpa:
+    properties:
       hibernate:
-        ddl-auto: update
-      properties:
-        hibernate:
-          dialect: org.hibernate.dialect.MySQL5Dialect
+        dialect: org.hibernate.dialect.PostgreSQLDialect
+        format_sql: true
+    hibernate:
+      show-sql: false
+      ddl-auto: update
+    show-sql: false
