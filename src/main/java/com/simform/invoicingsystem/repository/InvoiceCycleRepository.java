@@ -8,6 +8,9 @@ import java.util.Optional;
 
 @Repository
 public interface InvoiceCycleRepository extends JpaRepository<InvoiceCycle, Long> {
+<<<<<<< HEAD
 
+=======
+>>>>>>> 8856c3b (Add: mappings, repository and project service)
     Optional<InvoiceCycle> findByCycle(String cycle);
 }

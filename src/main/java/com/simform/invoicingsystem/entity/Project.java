@@ -7,6 +7,7 @@ import lombok.NoArgsConstructor;
 import javax.persistence.*;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.util.Collection;
 
 @Data
 @NoArgsConstructor
@@ -39,6 +40,7 @@ public class Project {
     @Column(length = 40)
     private String deletedBy;
 
+
     @OneToOne(cascade = {CascadeType.MERGE, CascadeType.PERSIST}, fetch = FetchType.EAGER, targetEntity = InvoiceCycle.class)
     private InvoiceCycle invoiceCycle;
 
@@ -50,4 +52,17 @@ public class Project {
 
     @OneToOne(cascade = {CascadeType.MERGE, CascadeType.PERSIST}, fetch = FetchType.EAGER, targetEntity = Csm.class)
     private Csm csm;
+
+    @OneToOne(cascade = {CascadeType.MERGE, CascadeType.PERSIST}, fetch = FetchType.EAGER, targetEntity = ProjectModel.class)
+    private ProjectModel projectModel;
+
+    @OneToOne(cascade = {CascadeType.MERGE, CascadeType.PERSIST}, fetch = FetchType.EAGER, targetEntity = Client.class)
+    private Client client;
+
+    @OneToOne(cascade = {CascadeType.MERGE, CascadeType.PERSIST}, fetch = FetchType.EAGER, targetEntity = MarketingChannel.class)
+    private MarketingChannel marketingChannel;
+
+    @OneToMany(cascade = {CascadeType.MERGE, CascadeType.PERSIST}, fetch = FetchType.EAGER, targetEntity = SalesPerson.class)
+    private Collection<SalesPerson> salesPersons;
+
 }
