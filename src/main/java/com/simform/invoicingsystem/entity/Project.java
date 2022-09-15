@@ -20,7 +20,7 @@ public class Project {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;
     @Column(length = 10)
-    private String projectName;
+    private String name;
     private String payModel;
     private int invoiceTerm;
     private LocalDate accStartDate;
