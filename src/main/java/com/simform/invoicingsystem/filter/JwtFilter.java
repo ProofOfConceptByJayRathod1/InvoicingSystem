@@ -33,18 +33,20 @@ public class JwtFilter extends OncePerRequestFilter {
     protected void doFilterInternal(HttpServletRequest httpServletRequest, HttpServletResponse httpServletResponse, FilterChain filterChain) throws ServletException, IOException {
         JwtUtil jwtUtil = new JwtUtil();
         String token = CookieUtil.getCookieValueByName(httpServletRequest, "token");
+
         String userName = null;
 
-        try {
-            userName = jwtUtil.extractUsername(token);
-        } catch (IllegalArgumentException e) {
-            log.error("An error occurred while getting username from token: ", e);
-        } catch (ExpiredJwtException e) {
-            log.warn("The token is expired and not valid anymore: ", e);
-        } catch (Exception exception) {
-            log.error("An error occurred while processing authentication : ", exception);
+        if (!token.equals("")) {
+            try {
+                userName = jwtUtil.extractUsername(token);
+            } catch (IllegalArgumentException e) {
+                log.error("An error occurred while getting username from token: ", e);
+            } catch (ExpiredJwtException e) {
+                log.warn("The token is expired and not valid anymore: ", e);
+            } catch (Exception exception) {
+                log.error("An error occurred while processing authentication : ", exception);
+            }
         }
-
         if (userName != null && SecurityContextHolder.getContext().getAuthentication() == null) {
             UserDetails userDetails = null;
             try {
