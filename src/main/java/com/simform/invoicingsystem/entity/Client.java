@@ -19,6 +19,8 @@ public class Client {
     private Long id;
     @Column(length = 50)
     private String name;
+    @Column(length = 50)
+    private String companyName;
     @Column(length = 100)
     private String email;
     @Column(length = 20)
