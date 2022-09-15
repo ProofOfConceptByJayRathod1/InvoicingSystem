@@ -38,4 +38,16 @@ public class Project {
     private LocalDateTime deletedAt;
     @Column(length = 40)
     private String deletedBy;
+
+    @OneToOne(cascade = {CascadeType.MERGE, CascadeType.PERSIST}, fetch = FetchType.EAGER, targetEntity = InvoiceCycle.class)
+    private InvoiceCycle invoiceCycle;
+
+    @OneToOne(cascade = {CascadeType.MERGE, CascadeType.PERSIST}, fetch = FetchType.EAGER, targetEntity = AccType.class)
+    private AccType accType;
+
+    @OneToOne(cascade = {CascadeType.MERGE, CascadeType.PERSIST}, fetch = FetchType.EAGER, targetEntity = LeadSource.class)
+    private LeadSource leadSource;
+
+    @OneToOne(cascade = {CascadeType.MERGE, CascadeType.PERSIST}, fetch = FetchType.EAGER, targetEntity = Csm.class)
+    private Csm csm;
 }
