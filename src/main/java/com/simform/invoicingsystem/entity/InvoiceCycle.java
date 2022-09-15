@@ -7,6 +7,7 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.Table;
+
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -19,30 +20,19 @@ import lombok.NoArgsConstructor;
 @Table(name = "invoice_cycle")
 public class InvoiceCycle {
 
-  @Id
-  @GeneratedValue(strategy = GenerationType.IDENTITY)
-  private Long invoiceCycleId;
-
-
-  @Column(name = "cycle", nullable = false)
-  private String cycle;
-
-  @Column(name = "created_at", nullable = false)
-  private LocalDateTime createdAt;
-
-  @Column(name = "created_by", nullable = false)
-  private String createdBy;
-
-  @Column(name = "updated_at", nullable = false)
-  private LocalDateTime updatedAt;
-
-  @Column(name = "updated_by", nullable = false)
-  private String updatedBy;
-
-  @Column(name = "deleted_at", nullable = false)
-  private LocalDateTime deletedAt;
-
-  @Column(name = "deleted_by", nullable = false)
-  private String deletedBy;
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long invoiceCycleId;
+    @Column(length = 20)
+    private String cycle;
+    private LocalDateTime createdAt;
+    @Column(length = 40)
+    private String createdBy;
+    private LocalDateTime updatedAt;
+    @Column(length = 40)
+    private String updatedBy;
+    private LocalDateTime deletedAt;
+    @Column(length = 40)
+    private String deletedBy;
 
 }

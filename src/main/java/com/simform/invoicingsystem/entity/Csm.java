@@ -11,6 +11,7 @@ import java.time.LocalDateTime;
 @AllArgsConstructor
 @NoArgsConstructor
 @Entity
+@Table(name = "csm")
 public class Csm {
 
     @Id
@@ -18,14 +19,13 @@ public class Csm {
     private long id;
     @Column(length = 50)
     private String name;
-    private long project_id;
-    private LocalDateTime created_at;
+    private LocalDateTime createdAt;
     @Column(length = 40)
-    private String created_by;
-    private LocalDateTime updated_at;
+    private String createdBy;
+    private LocalDateTime updatedAt;
     @Column(length = 40)
-    private String updated_by;
-    private LocalDateTime deleted_at;
+    private String updatedBy;
+    private LocalDateTime deletedAt;
     @Column(length = 40)
-    private String deleted_by;
+    private String deletedBy;
 }
