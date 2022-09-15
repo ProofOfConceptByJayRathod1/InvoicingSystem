@@ -27,14 +27,14 @@ public class SignInController {
         this.signInService = signInService;
     }
 
-    @Operation(summary = "SignIn API", description = "Here ,User have to enter username and password for SignIn purpose", tags = {"Sign In Controller"})
+    @Operation(summary = "SignIn API", description = "Here, user have to enter username and password for SignIn purpose", tags = {"Sign In Controller"})
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "User logged successfully"),
-            @ApiResponse(responseCode = "400", description = "Bad Request"),
             @ApiResponse(responseCode = "404", description = "User not found"),
-            @ApiResponse(responseCode = "403", description = "Unauthorized")
+            @ApiResponse(responseCode = "403", description = "Forbidden"),
+            @ApiResponse(responseCode = "401", description = "Unauthorized")
     })
-    @PostMapping(value = "/signIn")
+    @PostMapping(value = "/sign-in")
     public ResponseEntity<GenericResponse> userSignIn(@RequestBody @Validated SignInRequest signInRequest, HttpServletResponse response) throws UsernameNotFoundException {
         Cookie cookie = signInService.addCookie(signInRequest);
         response.addCookie(cookie);

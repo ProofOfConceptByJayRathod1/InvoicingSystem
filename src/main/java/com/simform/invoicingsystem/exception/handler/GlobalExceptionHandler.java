@@ -17,24 +17,24 @@ import java.time.LocalDateTime;
 public class GlobalExceptionHandler {
 
     @ExceptionHandler(value = UsernameNotFoundException.class)
-    public ResponseEntity<Object> userNotFoundException(UsernameNotFoundException exception) {
+    public ResponseEntity<GenericResponse> handleUsernameNotFoundException(UsernameNotFoundException exception) {
         GenericResponse genericResponse = new GenericResponse(false, exception.getMessage(),
                 HttpStatus.NOT_FOUND.value(), LocalDateTime.now());
-        log.error("handling UserNotFoundException...");
+        log.error("handling UsernameNotFoundException...");
         return new ResponseEntity<>(genericResponse, HttpStatus.NOT_FOUND);
     }
 
     @ExceptionHandler(value = BadCredentialsException.class)
-    public ResponseEntity<Object> badCredentialException(BadCredentialsException exception) {
+    public ResponseEntity<GenericResponse> handleBadCredentialException(BadCredentialsException exception) {
         GenericResponse genericResponse = new GenericResponse(false, exception.getMessage(),
-                HttpStatus.BAD_REQUEST.value(), LocalDateTime.now());
+                HttpStatus.UNAUTHORIZED.value(), LocalDateTime.now());
         log.error("handling BadCredentialsException...");
-        return new ResponseEntity<>(genericResponse, HttpStatus.BAD_REQUEST);
+        return new ResponseEntity<>(genericResponse, HttpStatus.UNAUTHORIZED);
     }
 
     @ExceptionHandler(value = AccessDeniedException.class)
-    public final ResponseEntity<GenericResponse> handleAccessDeniedException(AccessDeniedException ex) {
-        GenericResponse genericResponse = new GenericResponse(false, ex.getMessage() + " or you don't have permission", 403, LocalDateTime.now());
+    public final ResponseEntity<GenericResponse> handleAccessDeniedException(AccessDeniedException exception) {
+        GenericResponse genericResponse = new GenericResponse(false, exception.getMessage() + " or you don't have permission", 403, LocalDateTime.now());
         log.error("handling AccessDeniedException...");
         return new ResponseEntity<>(genericResponse, HttpStatus.FORBIDDEN);
     }
