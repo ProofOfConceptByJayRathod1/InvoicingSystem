@@ -1,7 +1,5 @@
 package com.simform.invoicingsystem.entity;
 
-
-
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -9,12 +7,11 @@ import lombok.NoArgsConstructor;
 import javax.persistence.*;
 import java.time.LocalDateTime;
 
-
 @NoArgsConstructor
 @Entity
 @Data
 @AllArgsConstructor
-@Table(name="Sales_persons")
+@Table(name="sales_persons")
 public class SalesPerson {
 
     @Id
@@ -22,14 +19,13 @@ public class SalesPerson {
     private long id;
     @Column(length=50)
     private String name;
-    private long project_id;
     @Column(length=40)
-    private String created_by;
-    private LocalDateTime updated_at;
+    private String createdBy;
+    private LocalDateTime updatedAt;
     @Column(length=40)
-    private String updated_by;
-    private LocalDateTime deleted_at;
+    private String updatedBy;
+    private LocalDateTime deletedAt;
     @Column(length=40)
-    private String deleted_by;
+    private String deletedBy;
 
 }

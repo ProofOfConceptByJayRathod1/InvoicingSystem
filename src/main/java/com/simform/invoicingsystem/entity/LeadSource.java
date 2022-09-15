@@ -11,7 +11,7 @@ import java.time.LocalDateTime;
 @Entity
 @Data
 @AllArgsConstructor
-@Table(name="Lead_sources")
+@Table(name="lead_sources")
 public class LeadSource {
 
     @Id
@@ -19,14 +19,14 @@ public class LeadSource {
     private long id;
     @Column(length=20)
     private String source;
-    private LocalDateTime created_at;
+    private LocalDateTime createdAt;
     @Column(length=40)
-    private String created_by;
-    private LocalDateTime updated_at;
+    private String createdBy;
+    private LocalDateTime updatedAt;
     @Column(length=40)
-    private String updated_by;
-    private LocalDateTime deleted_at;
+    private String updatedBy;
+    private LocalDateTime deletedAt;
     @Column(length=40)
-    private String deleted_by;
+    private String deletedBy;
 
 }
