@@ -17,13 +17,13 @@ public class AccType {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     @Column(length = 20)
-    private String type;
+    private String accType;
     private LocalDateTime createdAt;
     @Column(length = 40)
-    private String createBy;
+    private String createdBy;
     private LocalDateTime updatedAt;
     @Column(length = 40)
-    private String updateBy;
+    private String updatedBy;
     private LocalDateTime deletedAt;
     @Column(length = 40)
     private String deletedBy;

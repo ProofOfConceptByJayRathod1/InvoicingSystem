@@ -27,8 +27,8 @@ public class Project {
     private boolean activeBillingFlag;
     @Column(length = 250)
     private String contractLink;
-    private String startDate;
-    private String endDate;
+    private LocalDate startDate;
+    private LocalDate endDate;
     private boolean isActive;
     private LocalDateTime createdAt;
     @Column(length = 40)

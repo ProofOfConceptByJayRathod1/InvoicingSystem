@@ -9,5 +9,5 @@ import java.util.Optional;
 @Repository
 public interface AccTypeRepository extends JpaRepository<AccType, Long> {
 
-    Optional<AccType> findByType(String type);
+    Optional<AccType> findByAccType(String accType);
 }
