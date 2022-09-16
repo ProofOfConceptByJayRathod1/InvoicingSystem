@@ -20,6 +20,8 @@ public class Rate {
     @Column(length = 20)
     private String stack;
     private long techId;
+    private long userId;
+    private boolean isSpecial;
     private LocalDateTime createdAt;
     @Column(length = 40)
     private String createdBy;

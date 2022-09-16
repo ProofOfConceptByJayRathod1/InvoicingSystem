@@ -64,5 +64,7 @@ public class Project {
 
     @OneToMany(cascade = {CascadeType.MERGE, CascadeType.PERSIST}, fetch = FetchType.EAGER, targetEntity = SalesPerson.class)
     private Collection<SalesPerson> salesPersons;
-
+/*
+    @OneToMany(cascade = {CascadeType.MERGE, CascadeType.PERSIST}, fetch = FetchType.EAGER, targetEntity = Technology.class)
+    private Collection<Technology> technologies;*/
 }
