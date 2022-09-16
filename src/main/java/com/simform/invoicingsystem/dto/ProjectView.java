@@ -1,6 +1,5 @@
 package com.simform.invoicingsystem.dto;
 
-
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -10,14 +9,11 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 public class ProjectView {
 
-
-    private String projectName;
-    private String projectModelName;
+    private String name;
+    private String model;
     private String clientName;
-    private String refEmail;
+    private String email;
     private String invoiceCycle;
     private String payModel;
-    private String accountType;
-
-
+    private String accType;
 }

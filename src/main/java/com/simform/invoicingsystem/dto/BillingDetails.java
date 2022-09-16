@@ -12,7 +12,7 @@ public class BillingDetails {
     private String cycle;
     private int invoiceTerm;
     private String payModel;
-    private String type;
+    private String accType;
     private LocalDate accStartDate;
-    private String startDate;
+    private LocalDate projectStartDate;
 }

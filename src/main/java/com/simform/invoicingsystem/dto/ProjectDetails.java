@@ -8,8 +8,9 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @AllArgsConstructor
 public class ProjectDetails {
-    private String projectName;
-    private ProjectModelDetails projectModelDetails;
+    private String name;
+    private String model;
     private ClientDetails clientDetails;
     private BillingDetails billingDetails;
+    private OtherDetails otherDetails;
 }
