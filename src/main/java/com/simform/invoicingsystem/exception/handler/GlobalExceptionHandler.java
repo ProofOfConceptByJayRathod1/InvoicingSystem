@@ -2,7 +2,6 @@ package com.simform.invoicingsystem.exception.handler;
 
 import com.simform.invoicingsystem.dto.GenericResponse;
 import com.simform.invoicingsystem.exception.ResourceNotFoundException;
-import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.AccessDeniedException;
@@ -10,8 +9,8 @@ import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
-
 import java.time.LocalDateTime;
+import lombok.extern.slf4j.Slf4j;
 
 @ControllerAdvice
 @Slf4j
