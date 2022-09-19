@@ -12,6 +12,7 @@ import java.time.LocalDateTime;
 public class GenericResponse {
     private boolean success;
     private String message;
+    private Object data;
     private int code;
     private LocalDateTime timestamp;
 }

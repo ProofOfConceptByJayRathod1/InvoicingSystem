@@ -1,8 +1,11 @@
 package com.simform.invoicingsystem.controller;
 
+import com.fasterxml.jackson.databind.util.JSONPObject;
 import com.simform.invoicingsystem.dto.GenericResponse;
+import com.simform.invoicingsystem.dto.ProjectDetail;
 import com.simform.invoicingsystem.dto.ProjectDetails;
 import com.simform.invoicingsystem.service.ProjectService;
+import com.simform.invoicingsystem.util.EmptyJsonBody;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
@@ -25,14 +28,14 @@ public class ProjectController {
     }
 
     @PostMapping("/add")
-    public ResponseEntity<GenericResponse> addProject(@RequestBody ProjectDetails projectDetails) {
+    public ResponseEntity<GenericResponse> addProject(@RequestBody ProjectDetail projectDetails) {
         projectService.addProject(projectDetails);
-
         GenericResponse genericResponse = new GenericResponse();
         genericResponse.setMessage("Created");
         genericResponse.setCode(201);
         genericResponse.setTimestamp(LocalDateTime.now());
         genericResponse.setSuccess(true);
+        genericResponse.setData(new EmptyJsonBody());
         return new ResponseEntity<>(genericResponse, HttpStatus.CREATED);
     }
 }

@@ -1,9 +1,11 @@
 package com.simform.invoicingsystem.service;
 
 import com.simform.invoicingsystem.dto.ClientDetails;
+import com.simform.invoicingsystem.dto.ProjectDetail;
 import com.simform.invoicingsystem.dto.ProjectDetails;
 import com.simform.invoicingsystem.entity.*;
 import com.simform.invoicingsystem.repository.*;
+import org.modelmapper.ModelMapper;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -16,6 +18,7 @@ import java.util.Optional;
 @Transactional
 public class ProjectService {
 
+    private ModelMapper mapper;
     private final ProjectRepository projectRepository;
     private final ProjectModelRepository projectModelRepository;
     private final ClientRepository clientRepository;
@@ -43,59 +46,38 @@ public class ProjectService {
         this.rateRepository = rateRepository;
     }
 
-    public void addProject(ProjectDetails projectDetails) {
-        //convert projectDetails to project
-        Project project = new Project();
+    public void addProject(ProjectDetail projectDetails) {
 
-        Optional<ProjectModel> projectModel = projectModelRepository.findByModel(projectDetails.getModel());
-        projectModel.ifPresent(project::setProjectModel);
+        Project project = mapper.map(projectDetails, Project.class);
+        projectModelRepository.findByModel(project.getProjectModel().getModel()).ifPresent(project::setProjectModel);
+        invoiceCycleRepository.findByCycle(project.getInvoiceCycle().getCycle()).ifPresent(project::setInvoiceCycle);
+        accTypeRepository.findByAccType(project.getAccType().getAccType()).ifPresent(project::setAccType);
+        leadSourceRepository.findBySource(project.getLeadSource().getSource()).ifPresent(project::setLeadSource);
+        marketingChannelRepository.findByChannel(project.getMarketingChannel().getChannel()).ifPresent(project::setMarketingChannel);
+        csmRepository.findByName(project.getCsm().getName()).ifPresent(project::setCsm);
 
+        Collection<SalesPerson> salesPeople = project.getSalesPersons().stream()
+                .map(salesPerson -> salesPersonRepository.findByName(salesPerson.getName()))
+                .filter(Optional::isPresent).map(Optional::get).toList();
+        project.setSalesPersons(salesPeople);
         Client client = addClient(projectDetails.getClientDetails());
+
         project.setClient(client);
 
-        Optional<InvoiceCycle> invoiceCycle = invoiceCycleRepository.findByCycle(projectDetails.getBillingDetails().getCycle());
-        invoiceCycle.ifPresent(project::setInvoiceCycle);
-
-        Optional<AccType> accType = accTypeRepository.findByAccType(projectDetails.getBillingDetails().getAccType());
-        accType.ifPresent(project::setAccType);
-
-        Optional<Csm> csm = csmRepository.findByName(projectDetails.getOtherDetails().getCsm());
-        csm.ifPresent(project::setCsm);
-
-        Collection<SalesPerson> salesPeople = projectDetails.getOtherDetails().getSalesman().stream().map(salesPersonRepository::findByName).filter(Optional::isPresent).map(Optional::get).toList();
-
-        Optional<LeadSource> leadSource = leadSourceRepository.findBySource(projectDetails.getOtherDetails().getSource());
-        leadSource.ifPresent(project::setLeadSource);
-
-        Optional<MarketingChannel> marketingChannel = marketingChannelRepository.findByChannel(projectDetails.getOtherDetails().getChannel());
-        marketingChannel.ifPresent(project::setMarketingChannel);
-
-
-//        project.setTechnologies(addTechn);
+        project.setCreatedAt(LocalDateTime.now());
+        project.setCreatedBy(SecurityContextHolder.getContext().getAuthentication().getName());
 
         projectRepository.save(project);
     }
 
     public Client addClient(ClientDetails clientDetails) {
-        Optional<Client> optionalClient = clientRepository.findByEmail(clientDetails.getEmail());
-        if (optionalClient.isPresent()) {
-            //convert dto to entity
-            Client client = new Client();
-            return clientRepository.save(client);
-        } else {
-            //create new client from client DTO
-            Client client = new Client();
-            client.setName(clientDetails.getName());
-            client.setCompanyName(clientDetails.getCompanyName());
-            client.setEmail(clientDetails.getEmail());
-            client.setCity(clientDetails.getCity());
-            client.setState(clientDetails.getState());
-            client.setCountry(clientDetails.getCountry());
-            client.setPhoneNumber(clientDetails.getPhoneNumber());
+        return clientRepository.findByEmail(clientDetails.getEmail()).orElseGet(() -> {
+            Client client = mapper.map(clientDetails, Client.class);
             client.setCreatedAt(LocalDateTime.now());
             client.setCreatedBy(SecurityContextHolder.getContext().getAuthentication().getName());
-            return clientRepository.save(client);
-        }
+            clientRepository.save(client);
+            return client;
+        });
     }
 
 /*    public Collection<Technology> addTechnologies()

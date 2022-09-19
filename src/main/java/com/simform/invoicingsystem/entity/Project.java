@@ -32,7 +32,7 @@ public class Project {
     private boolean isActive;
     private LocalDateTime createdAt;
     @Column(length = 40)
-    private String createdBY;
+    private String createdBy;
     private LocalDateTime updatedAt;
     @Column(length = 40)
     private String updatedBy;

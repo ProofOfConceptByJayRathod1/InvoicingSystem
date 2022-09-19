@@ -3,6 +3,7 @@ package com.simform.invoicingsystem.controller;
 import com.simform.invoicingsystem.dto.GenericResponse;
 import com.simform.invoicingsystem.dto.SignInRequest;
 import com.simform.invoicingsystem.service.SignInService;
+import com.simform.invoicingsystem.util.EmptyJsonBody;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
@@ -38,7 +39,7 @@ public class SignInController {
     public ResponseEntity<GenericResponse> userSignIn(@RequestBody @Validated SignInRequest signInRequest, HttpServletResponse response) throws UsernameNotFoundException {
         Cookie cookie = signInService.addCookie(signInRequest);
         response.addCookie(cookie);
-        GenericResponse genericResponse = new GenericResponse(true, "signed in successfully", 200, LocalDateTime.now());
+        GenericResponse genericResponse = new GenericResponse(true, "signed in successfully", new EmptyJsonBody(), 200, LocalDateTime.now());
         return new ResponseEntity<>(genericResponse, HttpStatus.OK);
     }
 }
