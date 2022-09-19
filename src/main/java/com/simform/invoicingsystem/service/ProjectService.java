@@ -52,11 +52,11 @@ public class ProjectService {
 
     public ProjectDetail updateProject(HttpServletRequest request, ProjectDetail projectDetail, String projectName) {
 
-        Project project = projectRepository.findByName(projectName).orElseThrow(() -> new ResourceNotFoundException("Project doesn't exist"));
+        Project project = projectRepository.findByName(projectName).orElseThrow(() -> new ResourceNotFoundException(projectName+" Project name not found"));
 
         project.setName(projectDetail.getName());
 
-        ProjectModel projectModel = projectModelRepository.findByModel(projectDetail.getModel()).orElseThrow(() -> new ResourceNotFoundException("Project Model doesn't exist"));
+        ProjectModel projectModel = projectModelRepository.findByModel(projectDetail.getModel()).orElseThrow(() -> new ResourceNotFoundException(projectDetail.getModel()+" Project Model not found"));
         project.setProjectModel(projectModel);
 
         Client client = project.getClient();
@@ -69,20 +69,20 @@ public class ProjectService {
         client.setPhoneNumber(projectDetail.getClientDetails().getPhoneNumber());
         project.setClient(client);
 
-        InvoiceCycle invoiceCycle = invoiceCycleRepository.findByCycle(projectDetail.getCycle()).orElseThrow(() -> new ResourceNotFoundException("Invoice Cycle doesn't exist"));
+        InvoiceCycle invoiceCycle = invoiceCycleRepository.findByCycle(projectDetail.getCycle()).orElseThrow(() -> new ResourceNotFoundException(projectDetail.getCycle()+" Invoice Cycle not found"));
         project.setInvoiceCycle(invoiceCycle);
 
         project.setInvoiceTerm(projectDetail.getInvoiceTerm());
         project.setPayModel(projectDetail.getPayModel());
 
-        AccType accType = accTypeRepository.findByAccType(projectDetail.getAccType()).orElseThrow(() -> new ResourceNotFoundException("Account Type doesn't exist"));
+        AccType accType = accTypeRepository.findByAccType(projectDetail.getAccType()).orElseThrow(() -> new ResourceNotFoundException(projectDetail.getAccType()+" Account Type not found"));
         project.setAccType(accType);
 
         project.setAccStartDate(projectDetail.getAccStartDate());
         project.setStartDate(projectDetail.getProjectStartDate());
         project.setEndDate(projectDetail.getProjectEndDate());
 
-        Csm csm = csmRepository.findByName(projectDetail.getCsm()).orElseThrow(() -> new ResourceNotFoundException("CSM doesn't exist"));
+        Csm csm = csmRepository.findByName(projectDetail.getCsm()).orElseThrow(() -> new ResourceNotFoundException(projectDetail.getCsm()+" CSM name not found"));
         project.setCsm(csm);
 
         List<SalesPerson> salesPersonListNew = new ArrayList<>();
@@ -90,16 +90,17 @@ public class ProjectService {
         SalesPerson salesPerson;
 
         for (int i = 0; i < salesPersonName.size(); i++) {
-            salesPerson = salesPersonRepository.findByName(salesPersonName.get(i)).orElseThrow(() -> new ResourceNotFoundException("SalesPerson doesn't exist"));
+            String updatedSalesPerson=salesPersonName.get(i);
+            salesPerson = salesPersonRepository.findByName(updatedSalesPerson).orElseThrow(() -> new ResourceNotFoundException(updatedSalesPerson+" SalesPerson name not found"));
             salesPersonListNew.add(salesPerson);
         }
         project.setSalesPersons(salesPersonListNew);
         project.setContractLink(projectDetail.getContractLink());
 
-        LeadSource leadSource = leadSourceRepository.findBySource(projectDetail.getSource()).orElseThrow(() -> new ResourceNotFoundException("LeadSource doesn't exist"));
+        LeadSource leadSource = leadSourceRepository.findBySource(projectDetail.getSource()).orElseThrow(() -> new ResourceNotFoundException(projectDetail.getSource()+" LeadSource name not found"));
         project.setLeadSource(leadSource);
 
-        MarketingChannel marketingChannel = marketingChannelRepository.findByChannel(projectDetail.getChannel()).orElseThrow(() -> new ResourceNotFoundException("Marketing Channel doesn't exist"));
+        MarketingChannel marketingChannel = marketingChannelRepository.findByChannel(projectDetail.getChannel()).orElseThrow(() -> new ResourceNotFoundException(projectDetail.getChannel()+" Marketing Channel not found"));
         project.setMarketingChannel(marketingChannel);
 
         project.setActiveBillingFlag(projectDetail.isActiveBillingFlag());
