@@ -1,5 +1,6 @@
 package com.simform.invoicingsystem.service;
 
+import com.simform.invoicingsystem.dto.ProjectDetail;
 import com.simform.invoicingsystem.dto.ProjectDetails;
 import com.simform.invoicingsystem.entity.*;
 import com.simform.invoicingsystem.repository.*;
@@ -53,44 +54,45 @@ public class ProjectService {
         this.jwtUtil = jwtUtil;
     }
 
-    public ProjectDetails updateProject(HttpServletRequest request , ProjectDetails projectDetails, String projectName){
+    public ProjectDetail updateProject(HttpServletRequest request , ProjectDetail projectDetail, String projectName){
 
         Project project = projectRepository.findByName(projectName).orElseThrow();
 
-        project.setName(projectDetails.getName());
+        project.setName(projectDetail.getName());
 
-        ProjectModel projectModel = projectModelRepository.findByModel(projectDetails.getModel()).orElseThrow();
+        ProjectModel projectModel = projectModelRepository.findByModel(projectDetail.getModel()).orElseThrow();
         project.setProjectModel(projectModel);
 
         //Client client = new Client();
         Client client = project.getClient();
-        client.setName(projectDetails.getClientDetails().getName());
-        client.setCompanyName(projectDetails.getClientDetails().getCompanyName());
-        client.setEmail(projectDetails.getClientDetails().getEmail());
-        client.setCity(projectDetails.getClientDetails().getCity());
-        client.setState(projectDetails.getClientDetails().getState());
-        client.setCountry(projectDetails.getClientDetails().getCountry());
-        client.setPhoneNumber(projectDetails.getClientDetails().getPhoneNumber());
+        client.setName(projectDetail.getClientDetails().getName());
+        client.setCompanyName(projectDetail.getClientDetails().getCompanyName());
+        client.setEmail(projectDetail.getClientDetails().getEmail());
+        client.setCity(projectDetail.getClientDetails().getCity());
+        client.setState(projectDetail.getClientDetails().getState());
+        client.setCountry(projectDetail.getClientDetails().getCountry());
+        client.setPhoneNumber(projectDetail.getClientDetails().getPhoneNumber());
         project.setClient(client);
 
 
-        InvoiceCycle invoiceCycle = invoiceCycleRepository.findByCycle(projectDetails.getBillingDetails().getCycle()).orElseThrow();
+        InvoiceCycle invoiceCycle = invoiceCycleRepository.findByCycle(projectDetail.getCycle()).orElseThrow();
         project.setInvoiceCycle(invoiceCycle);
 
-        project.setInvoiceTerm(projectDetails.getBillingDetails().getInvoiceTerm());
-        project.setPayModel(projectDetails.getBillingDetails().getPayModel());
+        project.setInvoiceTerm(projectDetail.getInvoiceTerm());
+        project.setPayModel(projectDetail.getPayModel());
 
-        AccType accType = accTypeRepository.findByAccType(projectDetails.getBillingDetails().getAccType()).orElseThrow();
+        AccType accType = accTypeRepository.findByAccType(projectDetail.getAccType()).orElseThrow();
         project.setAccType(accType);
 
-        project.setAccStartDate(projectDetails.getBillingDetails().getAccStartDate());
-        project.setStartDate(projectDetails.getBillingDetails().getProjectStartDate());
+        project.setAccStartDate(projectDetail.getAccStartDate());
+        project.setStartDate(projectDetail.getProjectStartDate());
+        project.setEndDate(projectDetail.getProjectEndDate());
 
-        Csm csm = csmRepository.findByName(projectDetails.getOtherDetails().getCsm()).orElseThrow();
+        Csm csm = csmRepository.findByName(projectDetail.getCsm()).orElseThrow();
         project.setCsm(csm);
 
         List<SalesPerson> salesPersonListNew = new ArrayList<>();
-        List<String> salesPersonName = projectDetails.getOtherDetails().getSalesman();
+        List<String> salesPersonName = (List<String>) projectDetail.getSalesPersons();
         SalesPerson salesPerson;
 
         for(int i=0 ; i<salesPersonName.size() ; i++){
@@ -99,15 +101,15 @@ public class ProjectService {
         }
         project.setSalesPersons(salesPersonListNew);
 
-        project.setContractLink(projectDetails.getOtherDetails().getContractLink());
+        project.setContractLink(projectDetail.getContractLink());
 
-        LeadSource leadSource = leadSourceRepository.findBySource(projectDetails.getOtherDetails().getSource()).orElseThrow();
+        LeadSource leadSource = leadSourceRepository.findBySource(projectDetail.getSource()).orElseThrow();
         project.setLeadSource(leadSource);
 
-        MarketingChannel marketingChannel = marketingChannelRepository.findByChannel(projectDetails.getOtherDetails().getChannel()).orElseThrow();
+        MarketingChannel marketingChannel = marketingChannelRepository.findByChannel(projectDetail.getChannel()).orElseThrow();
         project.setMarketingChannel(marketingChannel);
 
-        project.setActiveBillingFlag(projectDetails.getOtherDetails().isActiveBillingFlag());
+        project.setActiveBillingFlag(projectDetail.isActiveBillingFlag());
 
         project.setUpdatedAt(LocalDateTime.now());
 
@@ -121,7 +123,7 @@ public class ProjectService {
 
         projectRepository.save(project);
 
-        return projectDetails;
+        return projectDetail;
 
     }
 }
