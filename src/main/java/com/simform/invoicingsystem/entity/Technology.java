@@ -7,6 +7,7 @@ import lombok.NoArgsConstructor;
 import javax.persistence.*;
 import java.time.LocalDateTime;
 import java.util.Collection;
+import java.util.Collections;
 
 @Data
 @NoArgsConstructor
@@ -30,6 +31,6 @@ public class Technology {
     @Column(length = 40)
     private String deletedBy;
 
-//    @OneToMany(cascade = {CascadeType.MERGE, CascadeType.PERSIST}, fetch = FetchType.EAGER, targetEntity = Rate.class)
-//    private Collection<Rate> rates;
+    @OneToMany(cascade = {CascadeType.MERGE, CascadeType.PERSIST}, fetch = FetchType.EAGER, targetEntity = Rate.class)
+    private Collection<Rate> rates = Collections.emptyList();
 }

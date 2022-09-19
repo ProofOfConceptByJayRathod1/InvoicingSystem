@@ -1,9 +1,7 @@
 package com.simform.invoicingsystem.controller;
 
-import com.fasterxml.jackson.databind.util.JSONPObject;
 import com.simform.invoicingsystem.dto.GenericResponse;
 import com.simform.invoicingsystem.dto.ProjectDetail;
-import com.simform.invoicingsystem.dto.ProjectDetails;
 import com.simform.invoicingsystem.service.ProjectService;
 import com.simform.invoicingsystem.util.EmptyJsonBody;
 import org.springframework.http.HttpStatus;
@@ -15,13 +13,12 @@ import org.springframework.web.bind.annotation.RequestMapping;
 
 import java.time.LocalDateTime;
 
-
 @Controller
 @RequestMapping("/projects")
 
 public class ProjectController {
 
-    private ProjectService projectService;
+    private final ProjectService projectService;
 
     public ProjectController(ProjectService projectService) {
         this.projectService = projectService;

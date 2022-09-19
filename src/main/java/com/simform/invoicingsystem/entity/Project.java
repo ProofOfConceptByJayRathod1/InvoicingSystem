@@ -40,7 +40,6 @@ public class Project {
     @Column(length = 40)
     private String deletedBy;
 
-
     @OneToOne(cascade = {CascadeType.MERGE, CascadeType.PERSIST}, fetch = FetchType.EAGER, targetEntity = InvoiceCycle.class)
     private InvoiceCycle invoiceCycle;
 
@@ -64,7 +63,7 @@ public class Project {
 
     @OneToMany(cascade = {CascadeType.MERGE, CascadeType.PERSIST}, fetch = FetchType.EAGER, targetEntity = SalesPerson.class)
     private Collection<SalesPerson> salesPersons;
-/*
-    @OneToMany(cascade = {CascadeType.MERGE, CascadeType.PERSIST}, fetch = FetchType.EAGER, targetEntity = Technology.class)
-    private Collection<Technology> technologies;*/
+
+    @OneToMany(cascade = {CascadeType.MERGE, CascadeType.PERSIST}, targetEntity = Technology.class)
+    private Collection<Technology> technologies;
 }

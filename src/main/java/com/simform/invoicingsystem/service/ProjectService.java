@@ -1,9 +1,9 @@
 package com.simform.invoicingsystem.service;
 
-import com.simform.invoicingsystem.dto.ClientDetails;
 import com.simform.invoicingsystem.dto.ProjectDetail;
-import com.simform.invoicingsystem.dto.ProjectDetails;
-import com.simform.invoicingsystem.entity.*;
+import com.simform.invoicingsystem.entity.Client;
+import com.simform.invoicingsystem.entity.Project;
+import com.simform.invoicingsystem.entity.SalesPerson;
 import com.simform.invoicingsystem.repository.*;
 import org.modelmapper.ModelMapper;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -18,24 +18,23 @@ import java.util.Optional;
 @Transactional
 public class ProjectService {
 
-    private ModelMapper mapper;
+    private final ModelMapper mapper;
     private final ProjectRepository projectRepository;
     private final ProjectModelRepository projectModelRepository;
-    private final ClientRepository clientRepository;
+    private final ClientService clientService;
     private final InvoiceCycleRepository invoiceCycleRepository;
     private final AccTypeRepository accTypeRepository;
     private final CsmRepository csmRepository;
     private final SalesPersonRepository salesPersonRepository;
     private final LeadSourceRepository leadSourceRepository;
     private final MarketingChannelRepository marketingChannelRepository;
-
     private final TechnologyRepository technologyRepository;
-    private final RateRepository rateRepository;
 
-    public ProjectService(ProjectRepository projectRepository, ProjectModelRepository projectModelRepository, ClientRepository clientRepository, InvoiceCycleRepository invoiceCycleRepository, AccTypeRepository accTypeRepository, CsmRepository csmRepository, SalesPersonRepository salesPersonRepository, LeadSourceRepository leadSourceRepository, MarketingChannelRepository marketingChannelRepository, TechnologyRepository technologyRepository, RateRepository rateRepository) {
+    public ProjectService(ModelMapper mapper, ProjectRepository projectRepository, ProjectModelRepository projectModelRepository, ClientService clientService, InvoiceCycleRepository invoiceCycleRepository, AccTypeRepository accTypeRepository, CsmRepository csmRepository, SalesPersonRepository salesPersonRepository, LeadSourceRepository leadSourceRepository, MarketingChannelRepository marketingChannelRepository, TechnologyRepository technologyRepository) {
+        this.mapper = mapper;
         this.projectRepository = projectRepository;
         this.projectModelRepository = projectModelRepository;
-        this.clientRepository = clientRepository;
+        this.clientService = clientService;
         this.invoiceCycleRepository = invoiceCycleRepository;
         this.accTypeRepository = accTypeRepository;
         this.csmRepository = csmRepository;
@@ -43,46 +42,30 @@ public class ProjectService {
         this.leadSourceRepository = leadSourceRepository;
         this.marketingChannelRepository = marketingChannelRepository;
         this.technologyRepository = technologyRepository;
-        this.rateRepository = rateRepository;
     }
 
     public void addProject(ProjectDetail projectDetails) {
 
         Project project = mapper.map(projectDetails, Project.class);
+        project.setActive(true);
         projectModelRepository.findByModel(project.getProjectModel().getModel()).ifPresent(project::setProjectModel);
         invoiceCycleRepository.findByCycle(project.getInvoiceCycle().getCycle()).ifPresent(project::setInvoiceCycle);
         accTypeRepository.findByAccType(project.getAccType().getAccType()).ifPresent(project::setAccType);
         leadSourceRepository.findBySource(project.getLeadSource().getSource()).ifPresent(project::setLeadSource);
         marketingChannelRepository.findByChannel(project.getMarketingChannel().getChannel()).ifPresent(project::setMarketingChannel);
         csmRepository.findByName(project.getCsm().getName()).ifPresent(project::setCsm);
+        project.setTechnologies(technologyRepository.findAll());
+        project.setCreatedAt(LocalDateTime.now());
+        project.setCreatedBy(SecurityContextHolder.getContext().getAuthentication().getName());
 
         Collection<SalesPerson> salesPeople = project.getSalesPersons().stream()
                 .map(salesPerson -> salesPersonRepository.findByName(salesPerson.getName()))
                 .filter(Optional::isPresent).map(Optional::get).toList();
         project.setSalesPersons(salesPeople);
-        Client client = addClient(projectDetails.getClientDetails());
 
+        Client client = clientService.addClient(projectDetails.getClientDetails());
         project.setClient(client);
-
-        project.setCreatedAt(LocalDateTime.now());
-        project.setCreatedBy(SecurityContextHolder.getContext().getAuthentication().getName());
 
         projectRepository.save(project);
     }
-
-    public Client addClient(ClientDetails clientDetails) {
-        return clientRepository.findByEmail(clientDetails.getEmail()).orElseGet(() -> {
-            Client client = mapper.map(clientDetails, Client.class);
-            client.setCreatedAt(LocalDateTime.now());
-            client.setCreatedBy(SecurityContextHolder.getContext().getAuthentication().getName());
-            clientRepository.save(client);
-            return client;
-        });
-    }
-
-/*    public Collection<Technology> addTechnologies()
-    {
-
-    }*/
-
 }
