@@ -61,9 +61,9 @@ public class Project {
     @OneToOne(cascade = {CascadeType.MERGE, CascadeType.PERSIST}, fetch = FetchType.EAGER, targetEntity = MarketingChannel.class)
     private MarketingChannel marketingChannel;
 
-    @OneToMany(cascade = {CascadeType.MERGE, CascadeType.PERSIST}, fetch = FetchType.EAGER, targetEntity = SalesPerson.class)
+    @ManyToMany(cascade = {CascadeType.MERGE, CascadeType.PERSIST}, fetch = FetchType.EAGER, targetEntity = SalesPerson.class)
     private Collection<SalesPerson> salesPersons;
 
-    @OneToMany(cascade = {CascadeType.MERGE, CascadeType.PERSIST}, targetEntity = Technology.class)
+    @ManyToMany(cascade = {CascadeType.MERGE, CascadeType.PERSIST}, targetEntity = Technology.class)
     private Collection<Technology> technologies;
 }

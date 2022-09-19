@@ -1,8 +1,10 @@
 package com.simform.invoicingsystem.dto;
 
+import com.simform.invoicingsystem.validation.EmailValidation;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import org.springframework.validation.annotation.Validated;
 
 import java.time.LocalDate;
 import java.util.Collection;
@@ -11,7 +13,9 @@ import java.util.Collection;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
+@Validated
 public class ProjectDetail {
+    @EmailValidation
     private String name;
     private String model;
     private ClientDetails clientDetails;
@@ -25,7 +29,7 @@ public class ProjectDetail {
     private String csm;
     private Collection<String> salesPersons;
     private String contractLink;
-    private String source;
+    private String leadSource;
     private String channel;
     private boolean activeBillingFlag;
 }
