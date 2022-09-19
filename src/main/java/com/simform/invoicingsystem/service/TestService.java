@@ -11,39 +11,6 @@ import java.util.ArrayList;
 @Service
 
 public class TestService {
- /*   BillingDetails billingDetails = new BillingDetails();
-billingDetails.setAccStartDate(LocalDate.now());
-billingDetails.setAccType("accType");
-billingDetails.setCycle("billCycle");
-billingDetails.setInvoiceTerm(30);
-billingDetails.setPayModel("payModel");
-
-
-    ClientDetails clientDetails = new ClientDetails();
-clientDetails.setName("client");
-clientDetails.setState("state");
-clientDetails.setCountry("country");
-clientDetails.setCity("city");
-clientDetails.setCompanyName("company");
-clientDetails.setEmail("tony@gmail.com");
-clientDetails.setPhoneNumber("728814102000");
-
-
-    OtherDetails otherDetails = new OtherDetails();
-otherDetails.setChannel("channel");
-otherDetails.setActiveBillingFlag(false);
-otherDetails.setContractLink("contractLink");
-otherDetails.setCsm("CSM");
-otherDetails.setSource("leadSource");
-
-
-    ProjectDetails projectDetails = new ProjectDetails();
-projectDetails.setName("name");
-projectDetails.setModel("model");
-projectDetails.setBillingDetails(billingDetails);
-projectDetails.setClientDetails(clientDetails);
-projectDetails.setOtherDetails(otherDetails);
-*/
  private ProjectRepository projectRepository;
 
      public TestService(ProjectRepository projectRepository) {
@@ -153,7 +120,7 @@ projectDetails.setOtherDetails(otherDetails);
         actualProject.setInvoiceTerm(1);
         actualProject.setLeadSource(leadSource);
         actualProject.setMarketingChannel(marketingChannel);
-        actualProject.setName("Project XYZ");
+        actualProject.setName("Project");
         actualProject.setPayModel("Pay Model");
         actualProject.setProjectModel(projectModel);
 

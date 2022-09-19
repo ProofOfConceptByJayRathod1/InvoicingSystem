@@ -87,20 +87,12 @@ public class ProjectService {
         project.setStartDate(projectDetails.getBillingDetails().getProjectStartDate());
 
         Csm csm = csmRepository.findByName(projectDetails.getOtherDetails().getCsm()).orElseThrow();
-
-        /*AtomicInteger i= new AtomicInteger();
-        project.getSalesPersons().stream().forEach(salesPerson -> {
-            salesPerson.setName(projectDetails.getOtherDetails().getSalesman().get(i.get()));
-            //SalesPerson salesPerson1 = salesPersonRepository.findByName(projectDetails.getOtherDetails().getSalesman().get(i.get())).orElseThrow();
-            i.getAndIncrement();
-        });*/
-        //Collection<SalesPerson> salesPersonCollection  = projectDetails.getOtherDetails().getSalesman().
-        //salesPersonRepository.findAll(projectDetails.getOtherDetails().getSalesman());
-
+        project.setCsm(csm);
 
         List<SalesPerson> salesPersonListNew = new ArrayList<>();
         List<String> salesPersonName = projectDetails.getOtherDetails().getSalesman();
         SalesPerson salesPerson;
+
         for(int i=0 ; i<salesPersonName.size() ; i++){
             salesPerson = salesPersonRepository.findByName(salesPersonName.get(i)).orElseThrow();
             salesPersonListNew.add(salesPerson);
