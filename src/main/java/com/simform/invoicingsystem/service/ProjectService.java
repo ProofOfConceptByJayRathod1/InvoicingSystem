@@ -44,9 +44,9 @@ public class ProjectService {
         this.technologyRepository = technologyRepository;
     }
 
-    public void addProject(ProjectDetail projectDetails) {
+    public void addProject(ProjectDetail projectDetail) {
 
-        Project project = mapper.map(projectDetails, Project.class);
+        Project project = mapper.map(projectDetail, Project.class);
         project.setActive(true);
         projectModelRepository.findByModel(project.getProjectModel().getModel()).ifPresent(project::setProjectModel);
         invoiceCycleRepository.findByCycle(project.getInvoiceCycle().getCycle()).ifPresent(project::setInvoiceCycle);
@@ -63,7 +63,7 @@ public class ProjectService {
                 .filter(Optional::isPresent).map(Optional::get).toList();
         project.setSalesPersons(salesPeople);
 
-        Client client = clientService.addClient(projectDetails.getClientDetails());
+        Client client = clientService.addClient(projectDetail.getClientDetails());
         project.setClient(client);
 
         projectRepository.save(project);
