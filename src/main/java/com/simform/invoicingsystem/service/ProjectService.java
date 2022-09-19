@@ -1,32 +1,17 @@
 package com.simform.invoicingsystem.service;
 
 import com.simform.invoicingsystem.dto.ProjectDetail;
-import com.simform.invoicingsystem.entity.AccType;
-import com.simform.invoicingsystem.entity.Client;
-import com.simform.invoicingsystem.entity.Csm;
-import com.simform.invoicingsystem.entity.InvoiceCycle;
-import com.simform.invoicingsystem.entity.LeadSource;
-import com.simform.invoicingsystem.entity.MarketingChannel;
-import com.simform.invoicingsystem.entity.Project;
-import com.simform.invoicingsystem.entity.ProjectModel;
-import com.simform.invoicingsystem.entity.SalesPerson;
+import com.simform.invoicingsystem.entity.*;
 import com.simform.invoicingsystem.exception.ResourceNotFoundException;
-import com.simform.invoicingsystem.repository.AccTypeRepository;
-import com.simform.invoicingsystem.repository.ClientRepository;
-import com.simform.invoicingsystem.repository.CsmRepository;
-import com.simform.invoicingsystem.repository.InvoiceCycleRepository;
-import com.simform.invoicingsystem.repository.LeadSourceRepository;
-import com.simform.invoicingsystem.repository.MarketingChannelRepository;
-import com.simform.invoicingsystem.repository.ProjectModelRepository;
-import com.simform.invoicingsystem.repository.ProjectRepository;
-import com.simform.invoicingsystem.repository.SalesPersonRepository;
+import com.simform.invoicingsystem.repository.*;
 import com.simform.invoicingsystem.util.JwtUtil;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+
+import javax.servlet.http.HttpServletRequest;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
-import javax.servlet.http.HttpServletRequest;
 
 @Service
 @Transactional

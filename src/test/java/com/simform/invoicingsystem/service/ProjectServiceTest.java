@@ -1,14 +1,6 @@
 package com.simform.invoicingsystem.service;
 
-import com.simform.invoicingsystem.entity.AccType;
-import com.simform.invoicingsystem.entity.Client;
-import com.simform.invoicingsystem.entity.Csm;
-import com.simform.invoicingsystem.entity.InvoiceCycle;
-import com.simform.invoicingsystem.entity.LeadSource;
-import com.simform.invoicingsystem.entity.MarketingChannel;
-import com.simform.invoicingsystem.entity.Project;
-import com.simform.invoicingsystem.entity.ProjectModel;
-import com.simform.invoicingsystem.entity.SalesPerson;
+import com.simform.invoicingsystem.entity.*;
 import com.simform.invoicingsystem.repository.ProjectRepository;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
@@ -18,6 +10,7 @@ import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMock
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.test.web.servlet.MockMvc;
+
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.Arrays;

@@ -1,16 +1,9 @@
 package com.simform.invoicingsystem.service;
 
-import com.simform.invoicingsystem.entity.AccType;
-import com.simform.invoicingsystem.entity.Client;
-import com.simform.invoicingsystem.entity.Csm;
-import com.simform.invoicingsystem.entity.InvoiceCycle;
-import com.simform.invoicingsystem.entity.LeadSource;
-import com.simform.invoicingsystem.entity.MarketingChannel;
-import com.simform.invoicingsystem.entity.Project;
-import com.simform.invoicingsystem.entity.ProjectModel;
-import com.simform.invoicingsystem.entity.SalesPerson;
+import com.simform.invoicingsystem.entity.*;
 import com.simform.invoicingsystem.repository.ProjectRepository;
 import org.springframework.stereotype.Service;
+
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.ArrayList;

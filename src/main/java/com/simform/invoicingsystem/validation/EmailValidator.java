@@ -1,8 +1,8 @@
 package com.simform.invoicingsystem.validation;
 
-import java.util.regex.Pattern;
 import javax.validation.ConstraintValidator;
 import javax.validation.ConstraintValidatorContext;
+import java.util.regex.Pattern;
 
 public class EmailValidator implements ConstraintValidator<EmailValidation, String> {
 
