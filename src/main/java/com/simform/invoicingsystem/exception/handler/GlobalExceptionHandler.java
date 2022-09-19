@@ -1,6 +1,7 @@
 package com.simform.invoicingsystem.exception.handler;
 
 import com.simform.invoicingsystem.dto.GenericResponse;
+import com.simform.invoicingsystem.exception.ResourceNotFoundException;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -37,5 +38,12 @@ public class GlobalExceptionHandler {
         GenericResponse genericResponse = new GenericResponse(false, exception.getMessage() + " or you don't have permission", 403, LocalDateTime.now());
         log.error("handling AccessDeniedException...");
         return new ResponseEntity<>(genericResponse, HttpStatus.FORBIDDEN);
+    }
+
+    @ExceptionHandler(value = ResourceNotFoundException.class)
+    public ResponseEntity<GenericResponse> handleResourceNotFoundException(ResourceNotFoundException exception) {
+        GenericResponse genericResponse = new GenericResponse(false, exception.getMessage(), HttpStatus.NOT_FOUND.value(), LocalDateTime.now());
+        log.error("handling ResourceNotFoundException...");
+        return new ResponseEntity<>(genericResponse, HttpStatus.NOT_FOUND);
     }
 }

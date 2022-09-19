@@ -2,22 +2,21 @@ package com.simform.invoicingsystem.service;
 
 
 import com.simform.invoicingsystem.entity.*;
-import com.simform.invoicingsystem.repository.*;
+import com.simform.invoicingsystem.repository.ProjectRepository;
 import org.springframework.stereotype.Service;
-
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
+
 @Service
-
 public class TestService {
- private ProjectRepository projectRepository;
+    private ProjectRepository projectRepository;
 
-     public TestService(ProjectRepository projectRepository) {
-          this.projectRepository = projectRepository;
-     }
+    public TestService(ProjectRepository projectRepository) {
+        this.projectRepository = projectRepository;
+    }
 
-     public Project getProject() {
+    public Project getProject() {
         LocalDate ofEpochDayResult = LocalDate.ofEpochDay(1L);
         LocalDateTime now = LocalDateTime.now();
 
@@ -126,16 +125,16 @@ public class TestService {
 
         ArrayList<SalesPerson> salesPersonList = new ArrayList<>();
         salesPersonList.add(new SalesPerson("AAA"));
-          salesPersonList.add(new SalesPerson("BBB"));
-          salesPersonList.add(new SalesPerson("CCC"));
-          salesPersonList.add(new SalesPerson("DDD"));
+        salesPersonList.add(new SalesPerson("BBB"));
+        salesPersonList.add(new SalesPerson("CCC"));
+        salesPersonList.add(new SalesPerson("DDD"));
         actualProject.setSalesPersons(salesPersonList);
         actualProject.setStartDate(ofEpochDayResult);
         actualProject.setUpdatedAt(now);
         actualProject.setUpdatedBy("2020-03-01");
 
 
-        return  projectRepository.save(actualProject);
+        return projectRepository.save(actualProject);
 
     }
 }

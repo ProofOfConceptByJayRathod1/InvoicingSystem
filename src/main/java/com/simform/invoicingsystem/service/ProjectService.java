@@ -1,18 +1,17 @@
 package com.simform.invoicingsystem.service;
 
 import com.simform.invoicingsystem.dto.ProjectDetail;
-import com.simform.invoicingsystem.dto.ProjectDetails;
 import com.simform.invoicingsystem.entity.*;
+import com.simform.invoicingsystem.exception.ResourceNotFoundException;
 import com.simform.invoicingsystem.repository.*;
 import com.simform.invoicingsystem.util.JwtUtil;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
 import java.time.LocalDateTime;
-import java.util.*;
-import java.util.concurrent.atomic.AtomicInteger;
+import java.util.ArrayList;
+import java.util.List;
 
 @Service
 @Transactional
@@ -22,11 +21,9 @@ public class ProjectService {
 
     private ProjectModelRepository projectModelRepository;
 
-
     private InvoiceCycleRepository invoiceCycleRepository;
 
     private AccTypeRepository accTypeRepository;
-
 
     private SalesPersonRepository salesPersonRepository;
 
@@ -35,7 +32,6 @@ public class ProjectService {
     private MarketingChannelRepository marketingChannelRepository;
 
     private CsmRepository csmRepository;
-
 
     private ClientRepository clientRepository;
 
@@ -54,16 +50,15 @@ public class ProjectService {
         this.jwtUtil = jwtUtil;
     }
 
-    public ProjectDetail updateProject(HttpServletRequest request , ProjectDetail projectDetail, String projectName){
+    public ProjectDetail updateProject(HttpServletRequest request, ProjectDetail projectDetail, String projectName) {
 
-        Project project = projectRepository.findByName(projectName).orElseThrow();
+        Project project = projectRepository.findByName(projectName).orElseThrow(() -> new ResourceNotFoundException("Project doesn't exist"));
 
         project.setName(projectDetail.getName());
 
-        ProjectModel projectModel = projectModelRepository.findByModel(projectDetail.getModel()).orElseThrow();
+        ProjectModel projectModel = projectModelRepository.findByModel(projectDetail.getModel()).orElseThrow(() -> new ResourceNotFoundException("Project Model doesn't exist"));
         project.setProjectModel(projectModel);
 
-        //Client client = new Client();
         Client client = project.getClient();
         client.setName(projectDetail.getClientDetails().getName());
         client.setCompanyName(projectDetail.getClientDetails().getCompanyName());
@@ -74,43 +69,40 @@ public class ProjectService {
         client.setPhoneNumber(projectDetail.getClientDetails().getPhoneNumber());
         project.setClient(client);
 
-
-        InvoiceCycle invoiceCycle = invoiceCycleRepository.findByCycle(projectDetail.getCycle()).orElseThrow();
+        InvoiceCycle invoiceCycle = invoiceCycleRepository.findByCycle(projectDetail.getCycle()).orElseThrow(() -> new ResourceNotFoundException("Invoice Cycle doesn't exist"));
         project.setInvoiceCycle(invoiceCycle);
 
         project.setInvoiceTerm(projectDetail.getInvoiceTerm());
         project.setPayModel(projectDetail.getPayModel());
 
-        AccType accType = accTypeRepository.findByAccType(projectDetail.getAccType()).orElseThrow();
+        AccType accType = accTypeRepository.findByAccType(projectDetail.getAccType()).orElseThrow(() -> new ResourceNotFoundException("Account Type doesn't exist"));
         project.setAccType(accType);
 
         project.setAccStartDate(projectDetail.getAccStartDate());
         project.setStartDate(projectDetail.getProjectStartDate());
         project.setEndDate(projectDetail.getProjectEndDate());
 
-        Csm csm = csmRepository.findByName(projectDetail.getCsm()).orElseThrow();
+        Csm csm = csmRepository.findByName(projectDetail.getCsm()).orElseThrow(() -> new ResourceNotFoundException("CSM doesn't exist"));
         project.setCsm(csm);
 
         List<SalesPerson> salesPersonListNew = new ArrayList<>();
         List<String> salesPersonName = (List<String>) projectDetail.getSalesPersons();
         SalesPerson salesPerson;
 
-        for(int i=0 ; i<salesPersonName.size() ; i++){
-            salesPerson = salesPersonRepository.findByName(salesPersonName.get(i)).orElseThrow();
+        for (int i = 0; i < salesPersonName.size(); i++) {
+            salesPerson = salesPersonRepository.findByName(salesPersonName.get(i)).orElseThrow(() -> new ResourceNotFoundException("SalesPerson doesn't exist"));
             salesPersonListNew.add(salesPerson);
         }
         project.setSalesPersons(salesPersonListNew);
-
         project.setContractLink(projectDetail.getContractLink());
 
-        LeadSource leadSource = leadSourceRepository.findBySource(projectDetail.getSource()).orElseThrow();
+        LeadSource leadSource = leadSourceRepository.findBySource(projectDetail.getSource()).orElseThrow(() -> new ResourceNotFoundException("LeadSource doesn't exist"));
         project.setLeadSource(leadSource);
 
-        MarketingChannel marketingChannel = marketingChannelRepository.findByChannel(projectDetail.getChannel()).orElseThrow();
+        MarketingChannel marketingChannel = marketingChannelRepository.findByChannel(projectDetail.getChannel()).orElseThrow(() -> new ResourceNotFoundException("Marketing Channel doesn't exist"));
         project.setMarketingChannel(marketingChannel);
 
         project.setActiveBillingFlag(projectDetail.isActiveBillingFlag());
-
         project.setUpdatedAt(LocalDateTime.now());
 
         /*String token =  Arrays.stream(request.getCookies())
@@ -122,8 +114,6 @@ public class ProjectService {
         project.setUpdatedBy(userName);*/
 
         projectRepository.save(project);
-
         return projectDetail;
-
     }
 }
