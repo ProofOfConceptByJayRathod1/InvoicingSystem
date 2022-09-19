@@ -12,8 +12,6 @@ import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
-import javax.servlet.http.HttpServletRequest;
-
 @RestController
 public class ProjectController {
 
@@ -31,7 +29,7 @@ public class ProjectController {
             @ApiResponse(responseCode = "401", description = "Unauthorized")
     })
     @PutMapping(value = "/update/{projectName}")
-    public ResponseEntity<ProjectDetail> updateProject(HttpServletRequest request, @RequestBody ProjectDetail projectDetail, @PathVariable("projectName") String projectName) {
-        return new ResponseEntity<>(projectService.updateProject(request, projectDetail, projectName), HttpStatus.OK);
+    public ResponseEntity<ProjectDetail> updateProject(@RequestBody ProjectDetail projectDetail, @PathVariable("projectName") String projectName) {
+        return new ResponseEntity<>(projectService.updateProject(projectDetail, projectName), HttpStatus.OK);
     }
 }

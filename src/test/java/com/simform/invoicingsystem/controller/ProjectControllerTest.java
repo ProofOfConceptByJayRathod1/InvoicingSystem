@@ -16,7 +16,6 @@ import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 
-import javax.servlet.http.HttpServletRequest;
 import java.time.LocalDate;
 import java.util.Arrays;
 import java.util.Collection;
@@ -42,8 +41,8 @@ public class ProjectControllerTest {
     ClientDetails clientDetails = new ClientDetails("XYZ", "Companyname", "xyz@gmail.com", "Ahmedabad", "Gujarat", "India", "1234556");
     Collection<String> salesPerson = Arrays.asList("AAA", "BBB");
     ProjectDetail projectDetail = new ProjectDetail("Project", "model", clientDetails, "cycle", 0, "paymodel", "accType", LocalDate.now(), LocalDate.now(), LocalDate.now(), "csm", salesPerson, "contractLink", "source", "channel", true);
-    HttpServletRequest request = null;
-    Mockito.when(projectService.updateProject(request, projectDetail, "XYZ")).thenReturn(projectDetail);
+
+    Mockito.when(projectService.updateProject(projectDetail, "XYZ")).thenReturn(projectDetail);
 
     mockMvc.perform(MockMvcRequestBuilders
         .put("/update/" + "XYZ")

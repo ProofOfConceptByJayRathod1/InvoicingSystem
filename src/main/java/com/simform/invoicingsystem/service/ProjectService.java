@@ -5,10 +5,10 @@ import com.simform.invoicingsystem.entity.*;
 import com.simform.invoicingsystem.exception.ResourceNotFoundException;
 import com.simform.invoicingsystem.repository.*;
 import com.simform.invoicingsystem.util.JwtUtil;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import javax.servlet.http.HttpServletRequest;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
@@ -50,7 +50,7 @@ public class ProjectService {
         this.jwtUtil = jwtUtil;
     }
 
-    public ProjectDetail updateProject(HttpServletRequest request, ProjectDetail projectDetail, String projectName) {
+    public ProjectDetail updateProject(ProjectDetail projectDetail, String projectName) {
 
         Project project = projectRepository.findByName(projectName).orElseThrow(() -> new ResourceNotFoundException(projectName+" Project name not found"));
 
@@ -104,15 +104,9 @@ public class ProjectService {
         project.setMarketingChannel(marketingChannel);
 
         project.setActiveBillingFlag(projectDetail.isActiveBillingFlag());
-        project.setUpdatedAt(LocalDateTime.now());
 
-        /*String token =  Arrays.stream(request.getCookies())
-                .filter(c -> c.getName().equals("token"))
-                .findFirst()
-                .map(Cookie::getValue)
-                .orElse(null);
-        String userName = jwtUtil.extractUsername(token);
-        project.setUpdatedBy(userName);*/
+        project.setUpdatedAt(LocalDateTime.now());
+        project.setUpdatedBy(SecurityContextHolder.getContext().getAuthentication().getName());
 
         projectRepository.save(project);
         return projectDetail;
