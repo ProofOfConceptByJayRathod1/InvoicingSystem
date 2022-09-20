@@ -1,5 +1,6 @@
 package com.simform.invoicingsystem.dto;
 
+
 import com.simform.invoicingsystem.util.validation.EmailValidation;
 import com.simform.invoicingsystem.util.validation.NameValidation;
 import lombok.AllArgsConstructor;
@@ -29,6 +30,6 @@ public class ClientDetails {
     private String city;
     private String state;
     private String country;
-    @Pattern(regexp = "^[+]?\\d{5,15}$",message = "Invalid phone number")
+    @Pattern(regexp = "^[+]?\\d{5,15}$", message = "Invalid phone number")
     private String phoneNumber;
 }

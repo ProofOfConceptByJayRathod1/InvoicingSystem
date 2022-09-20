@@ -27,8 +27,6 @@ public class ClientServiceTest {
     @Mock
     ClientRepository clientRepository;
     @Mock
-    SecurityContext securityContext;
-    @Mock
     ModelMapper modelMapper;
     @InjectMocks
     private ClientService clientService;
@@ -38,12 +36,10 @@ public class ClientServiceTest {
         String email = "chris@gmail.com";
         ClientDetails clientDetails = new ClientDetails("Chris", "Company Name", email, "LA", "CA", "USA", "1528252585");
         Client client = new Client(1L, "Chris", "Company Name", "chris@gmail.com", "LA", "CA", "USA", "1528252585", LocalDateTime.now(), null, null, null, null, null);
-        SecurityContextHolder.setContext(securityContext);
 
         when(clientRepository.findByEmail(email)).thenReturn(Optional.empty());
         when(clientRepository.save(client)).thenReturn(client);
         when(modelMapper.map(clientDetails, Client.class)).thenReturn(client);
-        when(SecurityContextHolder.getContext().getAuthentication().getName()).thenReturn(null);
 
         Client actualResult = clientService.addClient(clientDetails);
 
@@ -53,6 +49,5 @@ public class ClientServiceTest {
         verify(clientRepository, times(1)).findByEmail(any(String.class));
         verify(clientRepository, times(1)).save(client);
         verify(modelMapper, times(1)).map(clientDetails, Client.class);
-        verify(SecurityContextHolder.getContext(), times(1)).getAuthentication().getName();
     }
 }
