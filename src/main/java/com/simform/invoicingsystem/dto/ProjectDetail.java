@@ -1,6 +1,6 @@
 package com.simform.invoicingsystem.dto;
 
-import com.simform.invoicingsystem.validation.EmailValidation;
+import com.simform.invoicingsystem.util.validation.EmailValidation;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -8,7 +8,6 @@ import org.springframework.validation.annotation.Validated;
 
 import java.time.LocalDate;
 import java.util.Collection;
-
 
 @Data
 @NoArgsConstructor
