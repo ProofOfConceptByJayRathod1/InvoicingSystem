@@ -29,4 +29,7 @@ public class SalesPerson {
     @Column(length = 40)
     private String deletedBy;
 
+    public SalesPerson(String abc) {
+        this.name = abc;
+    }
 }

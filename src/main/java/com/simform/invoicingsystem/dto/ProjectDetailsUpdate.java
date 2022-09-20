@@ -6,21 +6,16 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.springframework.format.annotation.DateTimeFormat;
-import org.springframework.validation.annotation.Validated;
 
 import javax.validation.Valid;
 import javax.validation.constraints.Min;
 import java.time.LocalDate;
 import java.util.Collection;
 
-import java.time.LocalDate;
-import java.util.Collection;
-
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-@Validated
-public class ProjectDetails {
+public class ProjectDetailsUpdate {
     @NameValidation
     private String name;
     private String model;
@@ -46,7 +41,5 @@ public class ProjectDetails {
     private String leadSource;
     private String channel;
     private boolean activeBillingFlag;
-    @Valid
-    private Collection<TechStackRate> techStackRates;
     private String source;
 }
