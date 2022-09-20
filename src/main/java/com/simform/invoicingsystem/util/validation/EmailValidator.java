@@ -1,4 +1,4 @@
-package com.simform.invoicingsystem.validation;
+package com.simform.invoicingsystem.util.validation;
 
 import javax.validation.ConstraintValidator;
 import javax.validation.ConstraintValidatorContext;
