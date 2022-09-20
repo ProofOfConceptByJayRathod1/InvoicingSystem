@@ -8,19 +8,16 @@ import javax.persistence.*;
 import java.time.LocalDateTime;
 
 @Data
-@AllArgsConstructor
 @NoArgsConstructor
+@AllArgsConstructor
 @Entity
-@Table(name = "rates")
-public class Rate {
-
+@Table(name = "tech_stacks")
+public class TechStack {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private long id;
-    private String stack;
-    private String rate = "0";
-    private boolean isSpecial;
-    private String kekaUserId;
+    private Long id;
+    @Column(length = 40)
+    private String name;
     private LocalDateTime createdAt;
     @Column(length = 40)
     private String createdBy;
@@ -31,6 +28,6 @@ public class Rate {
     @Column(length = 40)
     private String deletedBy;
 
-    @ManyToOne(cascade = {CascadeType.MERGE, CascadeType.PERSIST}, fetch = FetchType.EAGER, targetEntity = TechStack.class)
-    private TechStack techStack;
+    @ManyToOne(cascade = {CascadeType.MERGE, CascadeType.PERSIST}, fetch = FetchType.EAGER,targetEntity = Technology.class)
+    private Technology technology;
 }

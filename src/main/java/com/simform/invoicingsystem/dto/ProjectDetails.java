@@ -1,11 +1,14 @@
 package com.simform.invoicingsystem.dto;
 
-import com.simform.invoicingsystem.util.validation.EmailValidation;
+import com.fasterxml.jackson.annotation.JsonFormat;
+import com.simform.invoicingsystem.validation.NameValidation;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.validation.annotation.Validated;
 
+import javax.validation.Valid;
 import java.time.LocalDate;
 import java.util.Collection;
 
@@ -13,17 +16,24 @@ import java.util.Collection;
 @NoArgsConstructor
 @AllArgsConstructor
 @Validated
-public class ProjectDetail {
-    @EmailValidation
+public class ProjectDetails {
+    @NameValidation
     private String name;
     private String model;
+    @Valid
     private ClientDetails clientDetails;
     private String cycle;
     private int invoiceTerm;
     private String payModel;
     private String accType;
+    @DateTimeFormat(iso = DateTimeFormat.ISO.DATE)
+    @JsonFormat(pattern = "dd-MMM-yyyy")
     private LocalDate accStartDate;
+    @DateTimeFormat(iso = DateTimeFormat.ISO.DATE)
+    @JsonFormat(pattern = "dd-MMM-yyyy")
     private LocalDate projectStartDate;
+    @DateTimeFormat(iso = DateTimeFormat.ISO.DATE)
+    @JsonFormat(pattern = "dd-MMM-yyyy")
     private LocalDate projectEndDate;
     private String csm;
     private Collection<String> salesPersons;
@@ -31,4 +41,6 @@ public class ProjectDetail {
     private String leadSource;
     private String channel;
     private boolean activeBillingFlag;
+    @Valid
+    private Collection<TechStackRate> techStackRates;
 }

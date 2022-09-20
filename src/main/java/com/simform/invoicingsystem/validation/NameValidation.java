@@ -1,4 +1,4 @@
-package com.simform.invoicingsystem.util.validation;
+package com.simform.invoicingsystem.validation;
 
 import javax.validation.Constraint;
 import javax.validation.Payload;

@@ -64,6 +64,6 @@ public class Project {
     @ManyToMany(cascade = {CascadeType.MERGE, CascadeType.PERSIST}, fetch = FetchType.EAGER, targetEntity = SalesPerson.class)
     private Collection<SalesPerson> salesPersons;
 
-    @ManyToMany(cascade = {CascadeType.MERGE, CascadeType.PERSIST}, targetEntity = Technology.class)
-    private Collection<Technology> technologies;
+    @ManyToMany(cascade = {CascadeType.MERGE, CascadeType.PERSIST}, targetEntity = Rate.class)
+    private Collection<Rate> rates;
 }

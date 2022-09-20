@@ -1,8 +1,8 @@
 package com.simform.invoicingsystem.dto;
 
 
-import com.simform.invoicingsystem.util.validation.EmailValidation;
-import com.simform.invoicingsystem.util.validation.NameValidation;
+import com.simform.invoicingsystem.validation.EmailValidation;
+import com.simform.invoicingsystem.validation.NameValidation;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
