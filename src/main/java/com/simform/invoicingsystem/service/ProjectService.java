@@ -1,6 +1,6 @@
 package com.simform.invoicingsystem.service;
 
-import com.simform.invoicingsystem.dto.ProjectDetail;
+import com.simform.invoicingsystem.dto.ProjectDetails;
 import com.simform.invoicingsystem.entity.*;
 import com.simform.invoicingsystem.exception.ResourceNotFoundException;
 import com.simform.invoicingsystem.repository.*;
@@ -50,43 +50,43 @@ public class ProjectService {
         this.jwtUtil = jwtUtil;
     }
 
-    public ProjectDetail updateProject(ProjectDetail projectDetail, String projectName) {
+    public ProjectDetails  updateProject(ProjectDetails projectDetails, String projectName) {
 
         Project project = projectRepository.findByName(projectName).orElseThrow(() -> new ResourceNotFoundException(projectName+" Project name not found"));
 
-        project.setName(projectDetail.getName());
+        project.setName(projectDetails.getName());
 
-        ProjectModel projectModel = projectModelRepository.findByModel(projectDetail.getModel()).orElseThrow(() -> new ResourceNotFoundException(projectDetail.getModel()+" Project Model not found"));
+        ProjectModel projectModel = projectModelRepository.findByModel(projectDetails.getModel()).orElseThrow(() -> new ResourceNotFoundException(projectDetails.getModel()+" Project Model not found"));
         project.setProjectModel(projectModel);
 
         Client client = project.getClient();
-        client.setName(projectDetail.getClientDetails().getName());
-        client.setCompanyName(projectDetail.getClientDetails().getCompanyName());
-        client.setEmail(projectDetail.getClientDetails().getEmail());
-        client.setCity(projectDetail.getClientDetails().getCity());
-        client.setState(projectDetail.getClientDetails().getState());
-        client.setCountry(projectDetail.getClientDetails().getCountry());
-        client.setPhoneNumber(projectDetail.getClientDetails().getPhoneNumber());
+        client.setName(projectDetails.getClientDetails().getName());
+        client.setCompanyName(projectDetails.getClientDetails().getCompanyName());
+        client.setEmail(projectDetails.getClientDetails().getEmail());
+        client.setCity(projectDetails.getClientDetails().getCity());
+        client.setState(projectDetails.getClientDetails().getState());
+        client.setCountry(projectDetails.getClientDetails().getCountry());
+        client.setPhoneNumber(projectDetails.getClientDetails().getPhoneNumber());
         project.setClient(client);
 
-        InvoiceCycle invoiceCycle = invoiceCycleRepository.findByCycle(projectDetail.getCycle()).orElseThrow(() -> new ResourceNotFoundException(projectDetail.getCycle()+" Invoice Cycle not found"));
+        InvoiceCycle invoiceCycle = invoiceCycleRepository.findByCycle(projectDetails.getCycle()).orElseThrow(() -> new ResourceNotFoundException(projectDetails.getCycle()+" Invoice Cycle not found"));
         project.setInvoiceCycle(invoiceCycle);
 
-        project.setInvoiceTerm(projectDetail.getInvoiceTerm());
-        project.setPayModel(projectDetail.getPayModel());
+        project.setInvoiceTerm(projectDetails.getInvoiceTerm());
+        project.setPayModel(projectDetails.getPayModel());
 
-        AccType accType = accTypeRepository.findByAccType(projectDetail.getAccType()).orElseThrow(() -> new ResourceNotFoundException(projectDetail.getAccType()+" Account Type not found"));
+        AccType accType = accTypeRepository.findByAccType(projectDetails.getAccType()).orElseThrow(() -> new ResourceNotFoundException(projectDetails.getAccType()+" Account Type not found"));
         project.setAccType(accType);
 
-        project.setAccStartDate(projectDetail.getAccStartDate());
-        project.setStartDate(projectDetail.getProjectStartDate());
-        project.setEndDate(projectDetail.getProjectEndDate());
+        project.setAccStartDate(projectDetails.getAccStartDate());
+        project.setStartDate(projectDetails.getProjectStartDate());
+        project.setEndDate(projectDetails.getProjectEndDate());
 
-        Csm csm = csmRepository.findByName(projectDetail.getCsm()).orElseThrow(() -> new ResourceNotFoundException(projectDetail.getCsm()+" CSM name not found"));
+        Csm csm = csmRepository.findByName(projectDetails.getCsm()).orElseThrow(() -> new ResourceNotFoundException(projectDetails.getCsm()+" CSM name not found"));
         project.setCsm(csm);
 
         List<SalesPerson> salesPersonListNew = new ArrayList<>();
-        List<String> salesPersonName = (List<String>) projectDetail.getSalesPersons();
+        List<String> salesPersonName = (List<String>) projectDetails.getSalesPersons();
         SalesPerson salesPerson;
 
         for (int i = 0; i < salesPersonName.size(); i++) {
@@ -95,20 +95,20 @@ public class ProjectService {
             salesPersonListNew.add(salesPerson);
         }
         project.setSalesPersons(salesPersonListNew);
-        project.setContractLink(projectDetail.getContractLink());
+        project.setContractLink(projectDetails.getContractLink());
 
-        LeadSource leadSource = leadSourceRepository.findBySource(projectDetail.getSource()).orElseThrow(() -> new ResourceNotFoundException(projectDetail.getSource()+" LeadSource name not found"));
+        LeadSource leadSource = leadSourceRepository.findBySource(projectDetails.getSource()).orElseThrow(() -> new ResourceNotFoundException(projectDetails.getSource()+" LeadSource name not found"));
         project.setLeadSource(leadSource);
 
-        MarketingChannel marketingChannel = marketingChannelRepository.findByChannel(projectDetail.getChannel()).orElseThrow(() -> new ResourceNotFoundException(projectDetail.getChannel()+" Marketing Channel not found"));
+        MarketingChannel marketingChannel = marketingChannelRepository.findByChannel(projectDetails.getChannel()).orElseThrow(() -> new ResourceNotFoundException(projectDetails.getChannel()+" Marketing Channel not found"));
         project.setMarketingChannel(marketingChannel);
 
-        project.setActiveBillingFlag(projectDetail.isActiveBillingFlag());
+        project.setActiveBillingFlag(projectDetails.isActiveBillingFlag());
 
         project.setUpdatedAt(LocalDateTime.now());
         project.setUpdatedBy(SecurityContextHolder.getContext().getAuthentication().getName());
 
         projectRepository.save(project);
-        return projectDetail;
+        return projectDetails;
     }
 }

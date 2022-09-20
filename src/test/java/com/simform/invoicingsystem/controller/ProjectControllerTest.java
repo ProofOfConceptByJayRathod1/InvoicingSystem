@@ -4,7 +4,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.json.JsonMapper;
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 import com.simform.invoicingsystem.dto.ClientDetails;
-import com.simform.invoicingsystem.dto.ProjectDetail;
+import com.simform.invoicingsystem.dto.ProjectDetails;
 import com.simform.invoicingsystem.service.ProjectService;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
@@ -40,13 +40,13 @@ public class ProjectControllerTest {
   void updateProjectTest() throws Exception {
     ClientDetails clientDetails = new ClientDetails("XYZ", "Companyname", "xyz@gmail.com", "Ahmedabad", "Gujarat", "India", "1234556");
     Collection<String> salesPerson = Arrays.asList("AAA", "BBB");
-    ProjectDetail projectDetail = new ProjectDetail("Project", "model", clientDetails, "cycle", 0, "paymodel", "accType", LocalDate.now(), LocalDate.now(), LocalDate.now(), "csm", salesPerson, "contractLink", "source", "channel", true);
+    ProjectDetails projectDetails = new ProjectDetails("Project", "model", clientDetails, "cycle", 0, "paymodel", "accType", LocalDate.now(), LocalDate.now(), LocalDate.now(), "csm", salesPerson, "contractLink", "source", "channel", true);
 
-    Mockito.when(projectService.updateProject(projectDetail, "XYZ")).thenReturn(projectDetail);
+    Mockito.when(projectService.updateProject(projectDetails, "XYZ")).thenReturn(projectDetails);
 
     mockMvc.perform(MockMvcRequestBuilders
         .put("/update/" + "XYZ")
-        .content(objectMapper.writeValueAsString(projectDetail))
+        .content(objectMapper.writeValueAsString(projectDetails))
         .contentType(MediaType.APPLICATION_JSON))
       .andExpect(status().isOk());
 

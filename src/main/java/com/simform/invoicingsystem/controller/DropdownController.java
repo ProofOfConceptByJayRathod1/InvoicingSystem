@@ -19,7 +19,6 @@ public class DropdownController {
     @Operation(summary = "Get CSM Name API", description = "Here, all the attributes of the CSM dropdown will be retrieved.", tags = {"Dropdown Controller"})
     @ApiResponses(value = {
       @ApiResponse(responseCode = "200", description = "Retrieved all the CSM data successfully"),
-      @ApiResponse(responseCode = "404", description = "Resource not found"),
       @ApiResponse(responseCode = "403", description = "Forbidden"),
       @ApiResponse(responseCode = "401", description = "Unauthorized")
     })
@@ -31,7 +30,6 @@ public class DropdownController {
     @Operation(summary = "Get SalesPerson Name API", description = "Here, all the attributes of the SalesPerson dropdown will be retrieved.", tags = {"Dropdown Controller"})
     @ApiResponses(value = {
       @ApiResponse(responseCode = "200", description = "Retrieved all the SalesPerson data successfully"),
-      @ApiResponse(responseCode = "404", description = "Resource not found"),
       @ApiResponse(responseCode = "403", description = "Forbidden"),
       @ApiResponse(responseCode = "401", description = "Unauthorized")
     })
@@ -44,7 +42,6 @@ public class DropdownController {
     @Operation(summary = "Get LeadSource Name API", description = "Here, all the attributes of the LeadSource dropdown will be retrieved.", tags = {"Dropdown Controller"})
     @ApiResponses(value = {
       @ApiResponse(responseCode = "200", description = "Retrieved all the LeadSource data successfully"),
-      @ApiResponse(responseCode = "404", description = "Resource not found"),
       @ApiResponse(responseCode = "403", description = "Forbidden"),
       @ApiResponse(responseCode = "401", description = "Unauthorized")
     })
@@ -56,7 +53,6 @@ public class DropdownController {
     @Operation(summary = "Get MarketingChannel Name API", description = "Here, all the attributes of the MarketingChannel dropdown will be retrieved.", tags = {"Dropdown Controller"})
     @ApiResponses(value = {
       @ApiResponse(responseCode = "200", description = "Retrieved all the MarketingChannel data successfully"),
-      @ApiResponse(responseCode = "404", description = "Resource not found"),
       @ApiResponse(responseCode = "403", description = "Forbidden"),
       @ApiResponse(responseCode = "401", description = "Unauthorized")
     })
@@ -68,7 +64,6 @@ public class DropdownController {
     @Operation(summary = "Get ProjectModel Name API", description = "Here, all the attributes of the ProjectModel dropdown will be retrieved.", tags = {"Dropdown Controller"})
     @ApiResponses(value = {
       @ApiResponse(responseCode = "200", description = "Retrieved all the ProjectModel data successfully"),
-      @ApiResponse(responseCode = "404", description = "Resource not found"),
       @ApiResponse(responseCode = "403", description = "Forbidden"),
       @ApiResponse(responseCode = "401", description = "Unauthorized")
     })
@@ -80,7 +75,6 @@ public class DropdownController {
     @Operation(summary = "Get InvoiceCycle Name API", description = "Here, all the attributes of the InvoiceCycle dropdown will be retrieved.", tags = {"Dropdown Controller"})
     @ApiResponses(value = {
       @ApiResponse(responseCode = "200", description = "Retrieved all the InvoiceCycle data successfully"),
-      @ApiResponse(responseCode = "404", description = "Resource not found"),
       @ApiResponse(responseCode = "403", description = "Forbidden"),
       @ApiResponse(responseCode = "401", description = "Unauthorized")
     })
@@ -92,7 +86,6 @@ public class DropdownController {
     @Operation(summary = "Get AccType Name API", description = "Here, all the attributes of the AccType dropdown will be retrieved.", tags = {"Dropdown Controller"})
     @ApiResponses(value = {
       @ApiResponse(responseCode = "200", description = "Retrieved all the AccType data successfully"),
-      @ApiResponse(responseCode = "404", description = "Resource not found"),
       @ApiResponse(responseCode = "403", description = "Forbidden"),
       @ApiResponse(responseCode = "401", description = "Unauthorized")
     })
@@ -104,7 +97,6 @@ public class DropdownController {
     @Operation(summary = "Get PayModel Name API", description = "Here, all the attributes of the PayModel dropdown will be retrieved.", tags = {"Dropdown Controller"})
     @ApiResponses(value = {
       @ApiResponse(responseCode = "200", description = "Retrieved all the PayModel data successfully"),
-      @ApiResponse(responseCode = "404", description = "Resource not found"),
       @ApiResponse(responseCode = "403", description = "Forbidden"),
       @ApiResponse(responseCode = "401", description = "Unauthorized")
     })
@@ -116,7 +108,6 @@ public class DropdownController {
     @Operation(summary = "Get Active Billing Name API", description = "Here, all the attributes of the Active Billing dropdown will be retrieved.", tags = {"Dropdown Controller"})
     @ApiResponses(value = {
       @ApiResponse(responseCode = "200", description = "Retrieved all the ActiveBilling data successfully"),
-      @ApiResponse(responseCode = "404", description = "Resource not found"),
       @ApiResponse(responseCode = "403", description = "Forbidden"),
       @ApiResponse(responseCode = "401", description = "Unauthorized")
     })

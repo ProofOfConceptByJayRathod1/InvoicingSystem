@@ -1,6 +1,7 @@
 package com.simform.invoicingsystem.controller;
 
-import com.simform.invoicingsystem.dto.ProjectDetail;
+import com.simform.invoicingsystem.dto.GenericResponse;
+import com.simform.invoicingsystem.dto.ProjectDetails;
 import com.simform.invoicingsystem.service.ProjectService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
@@ -11,6 +12,8 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
+
+import java.time.LocalDateTime;
 
 @RestController
 public class ProjectController {
@@ -29,7 +32,8 @@ public class ProjectController {
             @ApiResponse(responseCode = "401", description = "Unauthorized")
     })
     @PutMapping(value = "/update/{projectName}")
-    public ResponseEntity<ProjectDetail> updateProject(@RequestBody ProjectDetail projectDetail, @PathVariable("projectName") String projectName) {
-        return new ResponseEntity<>(projectService.updateProject(projectDetail, projectName), HttpStatus.OK);
+    public ResponseEntity<GenericResponse> updateProject(@RequestBody ProjectDetails projectDetails, @PathVariable("projectName") String projectName) {
+        projectService.updateProject(projectDetails, projectName);
+        return new ResponseEntity<>(new GenericResponse(true, "Updated", 200, LocalDateTime.now()), HttpStatus.OK);
     }
 }
