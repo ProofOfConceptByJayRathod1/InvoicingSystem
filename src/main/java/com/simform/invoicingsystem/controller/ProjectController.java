@@ -11,11 +11,12 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 
+import javax.validation.Valid;
 import java.time.LocalDateTime;
 
 @Controller
 @RequestMapping("/projects")
-
+@Valid
 public class ProjectController {
 
     private final ProjectService projectService;
@@ -25,7 +26,7 @@ public class ProjectController {
     }
 
     @PostMapping("/add")
-    public ResponseEntity<GenericResponse> addProject(@RequestBody ProjectDetail projectDetails) {
+    public ResponseEntity<GenericResponse> addProject(@Valid @RequestBody ProjectDetail projectDetails) {
         projectService.addProject(projectDetails);
         GenericResponse genericResponse = new GenericResponse();
         genericResponse.setMessage("Created");

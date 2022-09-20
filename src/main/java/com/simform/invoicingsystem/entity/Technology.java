@@ -30,7 +30,4 @@ public class Technology {
     private LocalDateTime deletedAt;
     @Column(length = 40)
     private String deletedBy;
-
-    @OneToMany(cascade = {CascadeType.MERGE, CascadeType.PERSIST}, fetch = FetchType.EAGER, targetEntity = Rate.class)
-    private Collection<Rate> rates = Collections.emptyList();
 }

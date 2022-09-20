@@ -19,7 +19,7 @@ public class ProjectModel {
     @Column(length = 20)
     private String model;
     private LocalDateTime createdAt;
-    private String createdBY;
+    private String createdBy;
     private LocalDateTime updatedAt;
     private String updatedBy;
     private LocalDateTime deletedAt;

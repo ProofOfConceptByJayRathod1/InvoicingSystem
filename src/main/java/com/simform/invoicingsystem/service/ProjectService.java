@@ -4,6 +4,7 @@ import com.simform.invoicingsystem.dto.ProjectDetail;
 import com.simform.invoicingsystem.entity.Client;
 import com.simform.invoicingsystem.entity.Project;
 import com.simform.invoicingsystem.entity.SalesPerson;
+import com.simform.invoicingsystem.exception.ProjectAlreadyExistException;
 import com.simform.invoicingsystem.repository.*;
 import org.modelmapper.ModelMapper;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -44,26 +45,32 @@ public class ProjectService {
         this.technologyRepository = technologyRepository;
     }
 
-    public void addProject(ProjectDetail projectDetail) {
+    public void addProject(ProjectDetail projectDetails) {
+        if (projectRepository.findByName(projectDetails.getName()).isPresent()) {
+            throw new ProjectAlreadyExistException("Project with name " + projectDetails.getName() + " already exist");
+        }
 
-        Project project = mapper.map(projectDetail, Project.class);
+        Project project = mapper.map(projectDetails, Project.class);
+
         project.setActive(true);
         projectModelRepository.findByModel(project.getProjectModel().getModel()).ifPresent(project::setProjectModel);
-        invoiceCycleRepository.findByCycle(project.getInvoiceCycle().getCycle()).ifPresent(project::setInvoiceCycle);
-        accTypeRepository.findByAccType(project.getAccType().getAccType()).ifPresent(project::setAccType);
-        leadSourceRepository.findBySource(project.getLeadSource().getSource()).ifPresent(project::setLeadSource);
-        marketingChannelRepository.findByChannel(project.getMarketingChannel().getChannel()).ifPresent(project::setMarketingChannel);
-        csmRepository.findByName(project.getCsm().getName()).ifPresent(project::setCsm);
-        project.setTechnologies(technologyRepository.findAll());
+        invoiceCycleRepository.findByCycle(projectDetails.getCycle()).ifPresent(project::setInvoiceCycle);
+        accTypeRepository.findByAccType(projectDetails.getAccType()).ifPresent(project::setAccType);
+        leadSourceRepository.findBySource(projectDetails.getLeadSource()).ifPresent(project::setLeadSource);
+        marketingChannelRepository.findByChannel(projectDetails.getChannel()).ifPresent(project::setMarketingChannel);
+        csmRepository.findByName(projectDetails.getCsm()).ifPresent(project::setCsm);
+
+       project.setTechnologies(technologyRepository.findAll());
+
         project.setCreatedAt(LocalDateTime.now());
         project.setCreatedBy(SecurityContextHolder.getContext().getAuthentication().getName());
 
-        Collection<SalesPerson> salesPeople = project.getSalesPersons().stream()
-                .map(salesPerson -> salesPersonRepository.findByName(salesPerson.getName()))
+        Collection<SalesPerson> salesPeople = projectDetails.getSalesPersons().stream()
+                .map(salesPersonRepository::findByName)
                 .filter(Optional::isPresent).map(Optional::get).toList();
         project.setSalesPersons(salesPeople);
 
-        Client client = clientService.addClient(projectDetail.getClientDetails());
+        Client client = clientService.addClient(projectDetails.getClientDetails());
         project.setClient(client);
 
         projectRepository.save(project);
