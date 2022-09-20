@@ -1,9 +1,9 @@
-package com.simform.invoicingsystem.validation;
+package com.simform.invoicingsystem.util.validation;
 
 import javax.validation.ConstraintValidator;
 import javax.validation.ConstraintValidatorContext;
 
-public class NotEmptyValidator implements ConstraintValidator<EmailValidation,String> {
+public class NotEmptyValidator implements ConstraintValidator<EmailValidation, String> {
     @Override
     public void initialize(EmailValidation constraintAnnotation) {
         ConstraintValidator.super.initialize(constraintAnnotation);

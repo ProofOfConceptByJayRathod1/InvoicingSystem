@@ -60,7 +60,7 @@ public class ProjectService {
         marketingChannelRepository.findByChannel(projectDetails.getChannel()).ifPresent(project::setMarketingChannel);
         csmRepository.findByName(projectDetails.getCsm()).ifPresent(project::setCsm);
 
-       project.setTechnologies(technologyRepository.findAll());
+        project.setTechnologies(technologyRepository.findAll());
 
         project.setCreatedAt(LocalDateTime.now());
         project.setCreatedBy(SecurityContextHolder.getContext().getAuthentication().getName());

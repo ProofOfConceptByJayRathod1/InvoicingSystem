@@ -21,7 +21,7 @@ public class Rate {
     private long id;
     @Column(length = 20)
     private String stack;
-    private String rate="0";
+    private String rate = "0";
     private boolean isSpecial;
     private LocalDateTime createdAt;
     @Column(length = 40)

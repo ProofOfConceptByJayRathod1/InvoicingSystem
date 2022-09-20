@@ -1,4 +1,5 @@
 package com.simform.invoicingsystem.dto;
+
 import com.fasterxml.jackson.annotation.JsonFormat;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -14,7 +15,7 @@ import java.time.LocalDate;
 public class BillingDetails {
 
     private String cycle;
-    @Min(value = 0,message = "Can't be negative")
+    @Min(value = 0, message = "Can't be negative")
     private int invoiceTerm;
     private String payModel;
     private String accType;

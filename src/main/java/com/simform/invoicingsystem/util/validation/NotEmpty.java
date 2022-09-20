@@ -1,4 +1,4 @@
-package com.simform.invoicingsystem.validation;
+package com.simform.invoicingsystem.util.validation;
 
 import javax.validation.Constraint;
 import javax.validation.Payload;
@@ -12,7 +12,9 @@ import java.lang.annotation.Target;
 @Target(ElementType.TYPE)
 public @interface NotEmpty {
     String message() default "Can't be null";
+
     Class<?>[] groups() default {};
+
     Class<? extends Payload>[] payload() default {};
 
 }

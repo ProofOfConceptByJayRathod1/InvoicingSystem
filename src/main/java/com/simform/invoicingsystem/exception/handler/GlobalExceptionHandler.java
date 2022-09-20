@@ -9,11 +9,14 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.AccessDeniedException;
 import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
-import org.springframework.web.bind.annotation.ControllerAdvice;
+import org.springframework.validation.FieldError;
+import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 
 import java.time.LocalDateTime;
+import java.util.HashMap;
+import java.util.Map;
 
 @RestControllerAdvice
 @Slf4j
@@ -40,6 +43,20 @@ public class GlobalExceptionHandler {
         GenericResponse genericResponse = new GenericResponse(false, exception.getMessage() + " or you don't have permission", new EmptyJsonBody(), 403, LocalDateTime.now());
         log.error("handling AccessDeniedException...");
         return new ResponseEntity<>(genericResponse, HttpStatus.FORBIDDEN);
+    }
+
+    @ExceptionHandler(value = MethodArgumentNotValidException.class)
+    public ResponseEntity<GenericResponse> handleValidationException(MethodArgumentNotValidException exception) {
+        Map<String, String> errors = new HashMap<>();
+        exception.getBindingResult().getAllErrors().forEach((error) -> {
+            String fieldName = ((FieldError) error).getField();
+            String errorMessage = error.getDefaultMessage();
+            errors.put(fieldName, errorMessage);
+        });
+        GenericResponse genericResponse = new GenericResponse(false, "Invalid input",errors.toString(),
+                HttpStatus.NOT_ACCEPTABLE.value(), LocalDateTime.now());
+        log.error("handling MethodArgumentNotValidException...");
+        return new ResponseEntity<>(genericResponse, HttpStatus.NOT_ACCEPTABLE);
     }
 
     @ExceptionHandler(value = ProjectAlreadyExistException.class)
