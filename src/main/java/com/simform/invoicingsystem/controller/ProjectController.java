@@ -1,8 +1,9 @@
 package com.simform.invoicingsystem.controller;
 
-import com.simform.invoicingsystem.dto.ClientDetails;
-import com.simform.invoicingsystem.dto.ProjectDetails;
+import com.simform.invoicingsystem.dto.GenericResponse;
+import com.simform.invoicingsystem.dto.ProjectDetail;
 import com.simform.invoicingsystem.service.ProjectService;
+import com.simform.invoicingsystem.util.EmptyJsonBody;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
@@ -15,14 +16,16 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 
-import javax.validation.Valid;
+import java.time.LocalDateTime;
+
+
 
 
 @Controller
 @RequestMapping("/projects")
 public class ProjectController {
 
-    private ProjectService projectService;
+    private final ProjectService projectService;
 
     public ProjectController(ProjectService projectService) {
         this.projectService = projectService;
@@ -38,12 +41,24 @@ public class ProjectController {
     })
 
     @PostMapping("/add")
-    public ResponseEntity<ProjectDetails> addProject(@Validated @RequestBody ProjectDetails projectDetails, BindingResult result) {
+    public ResponseEntity<GenericResponse> addProject(@Validated @RequestBody ProjectDetail projectDetails, BindingResult result) {
+
+        GenericResponse genericResponse = new GenericResponse();
         if(result.hasErrors()){
-            System.out.println(result);
-            return new ResponseEntity<ProjectDetails>(projectDetails, HttpStatus.NOT_ACCEPTABLE);
+            genericResponse.setMessage("Unable to create");
+            genericResponse.setCode(406);
+            genericResponse.setTimestamp(LocalDateTime.now());
+            genericResponse.setSuccess(false);
+            genericResponse.setData(new EmptyJsonBody());
+            return new ResponseEntity<>(genericResponse, HttpStatus.NOT_ACCEPTABLE);
         }
-        System.out.println(projectDetails);
-        return new ResponseEntity<ProjectDetails>(projectDetails, HttpStatus.CREATED);
+        genericResponse.setMessage("Created");
+        genericResponse.setCode(201);
+        genericResponse.setTimestamp(LocalDateTime.now());
+        genericResponse.setSuccess(true);
+        genericResponse.setData(new EmptyJsonBody());
+        projectService.addProject(projectDetails);
+        return new ResponseEntity<>(genericResponse, HttpStatus.CREATED);
+
     }
 }

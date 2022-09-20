@@ -32,14 +32,13 @@ public class Project {
     private boolean isActive;
     private LocalDateTime createdAt;
     @Column(length = 40)
-    private String createdBY;
+    private String createdBy;
     private LocalDateTime updatedAt;
     @Column(length = 40)
     private String updatedBy;
     private LocalDateTime deletedAt;
     @Column(length = 40)
     private String deletedBy;
-
 
     @OneToOne(cascade = {CascadeType.MERGE, CascadeType.PERSIST}, fetch = FetchType.EAGER, targetEntity = InvoiceCycle.class)
     private InvoiceCycle invoiceCycle;
@@ -62,7 +61,9 @@ public class Project {
     @OneToOne(cascade = {CascadeType.MERGE, CascadeType.PERSIST}, fetch = FetchType.EAGER, targetEntity = MarketingChannel.class)
     private MarketingChannel marketingChannel;
 
-    @OneToMany(cascade = {CascadeType.MERGE, CascadeType.PERSIST}, fetch = FetchType.EAGER, targetEntity = SalesPerson.class)
+    @ManyToMany(cascade = {CascadeType.MERGE, CascadeType.PERSIST}, fetch = FetchType.EAGER, targetEntity = SalesPerson.class)
     private Collection<SalesPerson> salesPersons;
 
+    @ManyToMany(cascade = {CascadeType.MERGE, CascadeType.PERSIST}, targetEntity = Technology.class)
+    private Collection<Technology> technologies;
 }

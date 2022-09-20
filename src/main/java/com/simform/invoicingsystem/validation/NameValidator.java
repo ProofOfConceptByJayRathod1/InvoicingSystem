@@ -15,8 +15,7 @@ public class NameValidator implements ConstraintValidator<NameValidation,String 
 
     @Override
     public boolean isValid(String value, ConstraintValidatorContext context) {
-        System.out.println(value);
-        return Pattern.compile(regex).matcher(value).matches() && value.trim().length()>0 && value != null;
+        return Pattern.compile(regex).matcher(value).matches();
 
     }
 }

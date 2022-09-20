@@ -7,10 +7,10 @@ import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 
-@Constraint(validatedBy = EmptyValidator.class)
+@Constraint(validatedBy = NotEmptyValidator.class)
 @Retention(RetentionPolicy.RUNTIME)
 @Target(ElementType.TYPE)
-public @interface Empty {
+public @interface NotEmpty {
     String message() default "Can't be null";
     Class<?>[] groups() default {};
     Class<? extends Payload>[] payload() default {};
