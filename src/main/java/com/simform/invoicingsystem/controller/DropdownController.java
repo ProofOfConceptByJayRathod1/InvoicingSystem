@@ -1,0 +1,7 @@
+package com.simform.invoicingsystem.controller;
+
+import org.springframework.web.bind.annotation.RestController;
+
+@RestController
+public class DropdownController {
+}
