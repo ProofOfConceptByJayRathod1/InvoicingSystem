@@ -1,12 +1,13 @@
 package com.simform.invoicingsystem.modelmapping;
 
 import com.simform.invoicingsystem.dto.ClientDetails;
-import com.simform.invoicingsystem.dto.ProjectDetails;
 import com.simform.invoicingsystem.dto.ProjectClassicView;
+import com.simform.invoicingsystem.dto.ProjectDetails;
 import com.simform.invoicingsystem.dto.TechStackRate;
 import com.simform.invoicingsystem.entity.Client;
 import com.simform.invoicingsystem.entity.Project;
 import com.simform.invoicingsystem.entity.Rate;
+import com.simform.invoicingsystem.entity.SalesPerson;
 import org.modelmapper.ModelMapper;
 import org.modelmapper.PropertyMap;
 
@@ -19,10 +20,15 @@ public class ModelMapping {
     public static PropertyMap<Project, ProjectDetails> getProjectDetailsMapping() {
         return new PropertyMap<>() {
             protected void configure() {
+            //    map().setSalesPersons(salesPersons(source.getSalesPersons()));
                 //map().setTechStackRates(techStackRate(source.getRates()));
                 map().setClientDetails(clientDetails(source.getClient()));
             }
         };
+    }
+
+    public static Collection<String> salesPersons(Collection<SalesPerson> salesPeople) {
+        return salesPeople.stream().map(SalesPerson::getName).toList();
     }
 
     public static ClientDetails clientDetails(Client client) {

@@ -19,7 +19,8 @@ public class Project {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;
-    @Column(length = 10, nullable = false)
+    private String defaultRate;
+    @Column(length = 20, nullable = false)
     private String name;
     private String payModel;
     private int invoiceTerm;
@@ -66,4 +67,10 @@ public class Project {
 
     @ManyToMany(cascade = {CascadeType.MERGE, CascadeType.PERSIST}, targetEntity = Rate.class)
     private Collection<Rate> rates;
+
+    @OneToMany(cascade = {CascadeType.MERGE, CascadeType.PERSIST}, targetEntity = SpecialRate.class)
+    private Collection<SpecialRate> specialRates;
+
+
+
 }

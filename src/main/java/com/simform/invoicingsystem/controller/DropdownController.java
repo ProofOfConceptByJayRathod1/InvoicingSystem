@@ -1,15 +1,17 @@
 package com.simform.invoicingsystem.controller;
 
 import com.simform.invoicingsystem.service.DropdownService;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.responses.ApiResponse;
+import io.swagger.v3.oas.annotations.responses.ApiResponses;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.util.List;
-import io.swagger.v3.oas.annotations.Operation;
-import io.swagger.v3.oas.annotations.responses.ApiResponse;
-import io.swagger.v3.oas.annotations.responses.ApiResponses;
 
+@Slf4j
 @RestController
 @RequestMapping("/get-data")
 public class DropdownController {
@@ -26,6 +28,7 @@ public class DropdownController {
     })
     @GetMapping("/getCsm")
     public List<String> getCsm() {
+        log.debug("Entering /getCsm");
         return dropdownService.getCsm();
     }
 
@@ -37,6 +40,7 @@ public class DropdownController {
     })
     @GetMapping("/getSalesPerson")
     public List<String> getSalesPerson() {
+        log.debug("Entering /getSalesPerson");
         return dropdownService.getSalesPerson();
     }
 
@@ -49,6 +53,7 @@ public class DropdownController {
     })
     @GetMapping("/getLeadSource")
     public List<String> getLeadSource() {
+        log.debug("Entering /getLeadSource end-point");
         return dropdownService.getLeadSource();
     }
 
@@ -60,6 +65,7 @@ public class DropdownController {
     })
     @GetMapping("/getMarketingChannel")
     public List<String> getMarketingChannel() {
+        log.debug("Entering /getMarketingChannel end-point");
         return dropdownService.getMarketingChannel();
     }
 
@@ -71,6 +77,7 @@ public class DropdownController {
     })
     @GetMapping(value = "/getProjectModel")
     public List<String> getProjectModel(){
+        log.debug("Entering /getProjectModel end-point");
         return dropdownService.getProjectModel();
     }
 
@@ -82,6 +89,7 @@ public class DropdownController {
     })
     @GetMapping(value = "/getInvoiceCycle")
     public List<String> getInvoiceCycle(){
+        log.debug("Entering /getInvoiceCycle end-point");
         return dropdownService.getInvoiceCycle();
     }
 
@@ -93,6 +101,7 @@ public class DropdownController {
     })
     @GetMapping(value = "/getAccType")
     public List<String> getAccType(){
+        log.debug("Entering /getAccType end-point");
         return dropdownService.getAccType();
     }
 
@@ -104,6 +113,7 @@ public class DropdownController {
     })
     @GetMapping(value = "/getPayModel")
     public List<String> getPayModel(){
+        log.debug("Entering /getPayModel end-point");
         return dropdownService.getPayModel();
     }
 
@@ -115,6 +125,7 @@ public class DropdownController {
     })
     @GetMapping(value = "/getActiveBilling")
     public List<String> getActiveBilling(){
+        log.debug("Entering /getActiveBilling");
         return dropdownService.getActiveBilling();
     }
 

@@ -19,8 +19,6 @@ public class Rate {
     private long id;
     private String stack;
     private String rate = "0";
-    private boolean isSpecial;
-    private String kekaUserId;
     private LocalDateTime createdAt;
     @Column(length = 40)
     private String createdBy;
@@ -30,7 +28,6 @@ public class Rate {
     private LocalDateTime deletedAt;
     @Column(length = 40)
     private String deletedBy;
-
     @ManyToOne(cascade = {CascadeType.MERGE, CascadeType.PERSIST}, fetch = FetchType.EAGER, targetEntity = TechStack.class)
     private TechStack techStack;
 }
