@@ -1,5 +1,6 @@
 package com.simform.invoicingsystem.service;
 
+import com.simform.invoicingsystem.dto.ProjectClassicView;
 import com.simform.invoicingsystem.dto.ProjectDetails;
 import com.simform.invoicingsystem.entity.*;
 import com.simform.invoicingsystem.exception.ProjectAlreadyExistException;
@@ -15,6 +16,7 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 import java.util.Optional;
+
 
 
 @Service
@@ -163,5 +165,26 @@ public class ProjectService {
 
         projectRepository.save(project);
         return projectDetails;
+    }
+
+    public List<ProjectClassicView> searchProject(String projectName) {
+        List<Project> projects = projectRepository.searchProjectByName(projectName);
+       if (projects.isEmpty())
+       {
+           throw new ResourceNotFoundException(projectName+" Project Name not found");
+       }
+       else {
+           return projectRepository.searchProjectByName(projectName).stream().map((project) -> {
+               ProjectClassicView projectClassicView = new ProjectClassicView();
+               projectClassicView.setName(project.getName());
+               projectClassicView.setModel(project.getProjectModel().getModel());
+               projectClassicView.setClientName(project.getClient().getName());
+               projectClassicView.setEmail(project.getClient().getEmail());
+               projectClassicView.setInvoiceCycle(project.getInvoiceCycle().getCycle());
+               projectClassicView.setPayModel(project.getPayModel());
+               projectClassicView.setAccType(project.getAccType().getAccType());
+               return projectClassicView;
+           }).toList();
+       }
     }
 }

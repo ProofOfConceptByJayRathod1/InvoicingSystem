@@ -1,6 +1,7 @@
 package com.simform.invoicingsystem.controller;
 
 import com.simform.invoicingsystem.dto.GenericResponse;
+import com.simform.invoicingsystem.dto.ProjectClassicView;
 import com.simform.invoicingsystem.dto.ProjectDetails;
 import com.simform.invoicingsystem.service.ProjectService;
 import io.swagger.v3.oas.annotations.Operation;
@@ -12,6 +13,7 @@ import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 import java.time.LocalDateTime;
+import java.util.List;
 
 
 @RestController
@@ -50,5 +52,18 @@ public class ProjectController {
         projectDetails = projectService.updateProject(projectDetails, projectName);
         return new ResponseEntity<>(new GenericResponse(true, "Updated", projectDetails, 200, LocalDateTime.now()), HttpStatus.OK);
 
+    }
+
+    @Operation(summary = "Search Project API", description = "Here, one can search all the details of project by entering Project Name.", tags = {"Project Controller"})
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "Project found successfully"),
+            @ApiResponse(responseCode = "404", description = "Resource not found"),
+            @ApiResponse(responseCode = "403", description = "Forbidden"),
+            @ApiResponse(responseCode = "401", description = "Unauthorized")
+    })
+    @GetMapping(value = "/searchProject")
+    public ResponseEntity<GenericResponse> searchProject(@RequestParam String projectName) {
+        List<ProjectClassicView> projectClassicView = projectService.searchProject(projectName);
+        return new ResponseEntity<>(new GenericResponse(true, "Found Successfully", projectClassicView, 200, LocalDateTime.now()), HttpStatus.OK);
     }
 }

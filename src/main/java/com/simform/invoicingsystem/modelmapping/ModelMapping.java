@@ -1,8 +1,8 @@
 package com.simform.invoicingsystem.modelmapping;
 
 import com.simform.invoicingsystem.dto.ClientDetails;
-import com.simform.invoicingsystem.dto.ProjectDetails;
 import com.simform.invoicingsystem.dto.ProjectClassicView;
+import com.simform.invoicingsystem.dto.ProjectDetails;
 import com.simform.invoicingsystem.dto.TechStackRate;
 import com.simform.invoicingsystem.entity.Client;
 import com.simform.invoicingsystem.entity.Project;
