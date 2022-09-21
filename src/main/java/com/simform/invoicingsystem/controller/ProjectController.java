@@ -3,6 +3,7 @@ package com.simform.invoicingsystem.controller;
 import com.simform.invoicingsystem.dto.GenericResponse;
 import com.simform.invoicingsystem.dto.ProjectClassicView;
 import com.simform.invoicingsystem.dto.ProjectDetails;
+import com.simform.invoicingsystem.dto.ProjectDetailsViewUpdate;
 import com.simform.invoicingsystem.service.ProjectService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
@@ -60,10 +61,38 @@ public class ProjectController {
             @ApiResponse(responseCode = "404", description = "Resource not found"),
             @ApiResponse(responseCode = "403", description = "Forbidden"),
             @ApiResponse(responseCode = "401", description = "Unauthorized")
+
     })
     @GetMapping(value = "/searchProject")
     public ResponseEntity<GenericResponse> searchProject(@RequestParam String projectName) {
         List<ProjectClassicView> projectClassicView = projectService.searchProject(projectName);
         return new ResponseEntity<>(new GenericResponse(true, "Found Successfully", projectClassicView, 200, LocalDateTime.now()), HttpStatus.OK);
+    }
+
+    @Operation(summary = "Project Find By Name API", description = "Here, all project details will be returned.", tags = {"Project Controller"})
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "Project get successfully"),
+            @ApiResponse(responseCode = "404", description = "Resource not found"),
+            @ApiResponse(responseCode = "403", description = "Forbidden"),
+            @ApiResponse(responseCode = "401", description = "Unauthorized")
+    })
+    @GetMapping(value = "/findByName")
+    public ResponseEntity<GenericResponse> findByName(@RequestParam String projectName) {
+        ProjectDetails projectDetails = projectService.findByName(projectName);
+        return new ResponseEntity<>(new GenericResponse(true, "Get", projectDetails, 200, LocalDateTime.now()), HttpStatus.OK);
+
+    }
+    
+    @Operation(summary = "Project Details Update API", description = "Here, details can be updated.", tags = {"Project Controller"})
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "Project details updated successfully"),
+            @ApiResponse(responseCode = "404", description = "Resource not found"),
+            @ApiResponse(responseCode = "403", description = "Forbidden"),
+            @ApiResponse(responseCode = "401", description = "Unauthorized")
+    })
+    @PutMapping(value = "/details/update")
+    public ResponseEntity<GenericResponse> updateProjectDetailsViewUpdate(@RequestParam String projectName, @RequestBody ProjectDetailsViewUpdate projectDetailsViewUpdate) {
+        projectDetailsViewUpdate = projectService.updateProjectDetails(projectName, projectDetailsViewUpdate);
+        return new ResponseEntity<>(new GenericResponse(true, "Updated", projectDetailsViewUpdate, 200, LocalDateTime.now()), HttpStatus.OK);
     }
 }

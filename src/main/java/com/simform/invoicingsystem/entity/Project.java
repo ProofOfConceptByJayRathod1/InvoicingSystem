@@ -19,7 +19,8 @@ public class Project {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;
-    @Column(length = 10, nullable = false)
+    private String defaultRate;
+    @Column(length = 20, nullable = false)
     private String name;
     private String payModel;
     private int invoiceTerm;
