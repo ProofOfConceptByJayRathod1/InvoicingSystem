@@ -17,4 +17,5 @@ public class TechStackRate {
     private String rate;
     private boolean isSpecial;
     private String kekaUserId;
+    private String technology;
 }

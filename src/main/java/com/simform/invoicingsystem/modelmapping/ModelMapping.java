@@ -2,7 +2,7 @@ package com.simform.invoicingsystem.modelmapping;
 
 import com.simform.invoicingsystem.dto.ClientDetails;
 import com.simform.invoicingsystem.dto.ProjectDetails;
-import com.simform.invoicingsystem.dto.ProjectView;
+import com.simform.invoicingsystem.dto.ProjectClassicView;
 import com.simform.invoicingsystem.dto.TechStackRate;
 import com.simform.invoicingsystem.entity.Client;
 import com.simform.invoicingsystem.entity.Project;
@@ -53,7 +53,7 @@ public class ModelMapping {
     }
 
 
-    public static PropertyMap<Project, ProjectView> getProjectViewMapping() {
+    public static PropertyMap<Project, ProjectClassicView> getProjectViewMapping() {
         return new PropertyMap<>() {
             protected void configure() {
                 map().setEmail(source.getClient().getEmail());

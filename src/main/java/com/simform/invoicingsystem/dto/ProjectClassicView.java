@@ -7,7 +7,7 @@ import lombok.NoArgsConstructor;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-public class ProjectView {
+public class ProjectClassicView {
 
     private String name;
     private String model;
