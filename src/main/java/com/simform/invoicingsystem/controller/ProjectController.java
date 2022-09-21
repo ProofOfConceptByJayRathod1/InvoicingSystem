@@ -29,7 +29,7 @@ public class ProjectController {
     }
 
 
-    @Operation(summary = "ADD PROJECT API", description = "Here, user can add new project", tags = {"Add Project Controller"})
+    @Operation(summary = "ADD PROJECT API", description = "Here, user can add new project", tags = {"Project Controller"})
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "Project added successfully"),
             @ApiResponse(responseCode = "404", description = "Resource not found"),
@@ -109,7 +109,6 @@ public class ProjectController {
         projectDetailsViewUpdate = projectService.updateProjectDetails(projectName, projectDetailsViewUpdate);
         log.info("Project '"+projectName+"' Updated successfully");
         log.debug("Exiting /projects/details/update end-point");
-        projectDetailsViewUpdate = projectService.updateProjectDetails(projectName, projectDetailsViewUpdate);
         return new ResponseEntity<>(new GenericResponse(true, "Updated", projectDetailsViewUpdate, 200, LocalDateTime.now()), HttpStatus.OK);
     }
 }

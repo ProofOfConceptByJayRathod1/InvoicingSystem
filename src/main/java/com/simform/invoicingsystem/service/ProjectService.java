@@ -80,15 +80,12 @@ public class ProjectService {
         project.setCreatedBy(SecurityContextHolder.getContext().getAuthentication().getName());
 
         project.setRates(
-                projectDetails.getTechStackRates().stream().map(techStackRate -> {
+                techStackRepository.findAll().stream().map(techStackRate -> {
                     Rate rate = new Rate();
-                    rate.setSpecial(techStackRate.isSpecial());
-                    rate.setKekaUserId(techStackRate.getKekaUserId());
                     rate.setRate("0");
-                    rate.setSpecial(false);
                     rate.setCreatedAt(now);
                     rate.setCreatedBy(createdBy);
-                    techStackRepository.findByName(techStackRate.getTechStack()).ifPresent(rate::setTechStack);
+                    rate.setTechStack(techStackRate);
                     return rateRepository.save(rate);
                 }).toList()
         );
