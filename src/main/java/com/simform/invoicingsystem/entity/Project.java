@@ -67,4 +67,10 @@ public class Project {
 
     @ManyToMany(cascade = {CascadeType.MERGE, CascadeType.PERSIST}, targetEntity = Rate.class)
     private Collection<Rate> rates;
+
+    @OneToMany(cascade = {CascadeType.MERGE, CascadeType.PERSIST}, targetEntity = SpecialRate.class)
+    private Collection<SpecialRate> specialRates;
+
+
+
 }
