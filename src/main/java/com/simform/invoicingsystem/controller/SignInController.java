@@ -1,7 +1,6 @@
 package com.simform.invoicingsystem.controller;
 
 import com.simform.invoicingsystem.dto.GenericResponse;
-import com.simform.invoicingsystem.dto.ProjectClassicView;
 import com.simform.invoicingsystem.dto.SignInRequest;
 import com.simform.invoicingsystem.service.SignInService;
 import com.simform.invoicingsystem.util.EmptyJsonBody;
@@ -20,7 +19,6 @@ import org.springframework.web.bind.annotation.RestController;
 import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletResponse;
 import java.time.LocalDateTime;
-import java.util.List;
 
 @Slf4j
 @RestController

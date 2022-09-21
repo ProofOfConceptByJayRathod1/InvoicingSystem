@@ -1,6 +1,7 @@
 package com.simform.invoicingsystem.service;
 
 import com.simform.invoicingsystem.dto.ProjectClassicView;
+import com.simform.invoicingsystem.dto.ProjectClassicViewResponse;
 import com.simform.invoicingsystem.dto.ProjectDetails;
 import com.simform.invoicingsystem.dto.ProjectDetailsViewUpdate;
 import com.simform.invoicingsystem.entity.*;
@@ -8,15 +9,17 @@ import com.simform.invoicingsystem.exception.ProjectAlreadyExistException;
 import com.simform.invoicingsystem.exception.ResourceNotFoundException;
 import com.simform.invoicingsystem.repository.*;
 import org.modelmapper.ModelMapper;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDateTime;
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.List;
-import java.util.Optional;
+import java.util.*;
+import java.util.stream.Collectors;
 
 
 @Service
@@ -36,8 +39,6 @@ public class ProjectService {
     private final TechStackRepository techStackRepository;
 
     private final RateRepository rateRepository;
-
-    private ClientRepository clientRepository;
 
     public ProjectService(ModelMapper mapper, ProjectRepository projectRepository, ProjectModelRepository projectModelRepository,
                           ClientService clientService, InvoiceCycleRepository invoiceCycleRepository, AccTypeRepository accTypeRepository,
@@ -169,17 +170,9 @@ public class ProjectService {
         if (projects.isEmpty()) {
             throw new ResourceNotFoundException(projectName + " Project Name not found");
         } else {
-            return projectRepository.searchProjectByName(projectName).stream().map((project) -> {
-                ProjectClassicView projectClassicView = new ProjectClassicView();
-                projectClassicView.setName(project.getName());
-                projectClassicView.setModel(project.getProjectModel().getModel());
-                projectClassicView.setClientName(project.getClient().getName());
-                projectClassicView.setEmail(project.getClient().getEmail());
-                projectClassicView.setInvoiceCycle(project.getInvoiceCycle().getCycle());
-                projectClassicView.setPayModel(project.getPayModel());
-                projectClassicView.setAccType(project.getAccType().getAccType());
-                return projectClassicView;
-            }).toList();
+            return projectRepository.searchProjectByName(projectName).stream().map(project -> new ProjectClassicView(project.getName(),
+                    project.getProjectModel().getModel(), project.getClient().getName(), project.getClient().getEmail(),
+                    project.getInvoiceCycle().getCycle(), project.getPayModel(), project.getAccType().getAccType())).toList();
         }
     }
 
@@ -206,5 +199,16 @@ public class ProjectService {
 
         projectRepository.save(project);
         return projectDetailsViewUpdate;
+    }
+
+    public ProjectClassicViewResponse viewProjects(int pageNo, int pageSize, String sortBy, String order) {
+        sortBy = Objects.equals(sortBy, "") || sortBy == null ? "name" : sortBy;
+        order = Objects.equals(order, "") || order == null ? "ASC" : order;
+        Pageable pageable = PageRequest.of(pageNo != 0 ? pageNo - 1 : 0, pageSize != 0 ? pageSize : 10, Sort.Direction.valueOf(order.toUpperCase()), sortBy);
+        Page<Project> projects = projectRepository.findAll(pageable);
+        List<ProjectClassicView> projectClassicViews = projects.getContent().stream().map(project -> new ProjectClassicView(project.getName(),
+                project.getProjectModel().getModel(), project.getClient().getName(), project.getClient().getEmail(),
+                project.getInvoiceCycle().getCycle(), project.getPayModel(), project.getAccType().getAccType())).collect(Collectors.toList());
+        return new ProjectClassicViewResponse(projectClassicViews, projects.getTotalPages(), projects.getTotalElements());
     }
 }
