@@ -8,6 +8,7 @@ import com.simform.invoicingsystem.service.ProjectService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
@@ -16,7 +17,7 @@ import org.springframework.web.bind.annotation.*;
 import java.time.LocalDateTime;
 import java.util.List;
 
-
+@Slf4j
 @RestController
 @RequestMapping("/projects")
 public class ProjectController {
@@ -37,7 +38,10 @@ public class ProjectController {
     })
     @PostMapping("/add")
     public ResponseEntity<GenericResponse> addProject(@Validated @RequestBody ProjectDetails projectDetails) {
+        log.debug("Entering /projects/add end-point");
         projectDetails = projectService.addProject(projectDetails);
+        log.info("Project '"+projectDetails.getName()+"' added successfully");
+        log.debug("Exiting /projects/add end-point");
         return new ResponseEntity<>(new GenericResponse(true, "Created", projectDetails, 201, LocalDateTime.now()), HttpStatus.CREATED);
     }
 
@@ -50,7 +54,10 @@ public class ProjectController {
     })
     @PutMapping(value = "/update/{projectName}")
     public ResponseEntity<GenericResponse> updateProject(@RequestBody ProjectDetails projectDetails, @PathVariable("projectName") String projectName) {
+        log.debug("Entering /projects/update/{projectName} end-point");
         projectDetails = projectService.updateProject(projectDetails, projectName);
+        log.info("Project '"+projectDetails.getName()+"' Updated successfully");
+        log.debug("Exiting /projects/update/{projectName} end-point");
         return new ResponseEntity<>(new GenericResponse(true, "Updated", projectDetails, 200, LocalDateTime.now()), HttpStatus.OK);
 
     }
@@ -65,7 +72,10 @@ public class ProjectController {
     })
     @GetMapping(value = "/searchProject")
     public ResponseEntity<GenericResponse> searchProject(@RequestParam String projectName) {
+        log.debug("Entering /projects/searchProject end-point");
         List<ProjectClassicView> projectClassicView = projectService.searchProject(projectName);
+        log.info("Project Name with '"+projectName+"' found successfully");
+        log.debug("Exiting /projects/searchProject end-point");
         return new ResponseEntity<>(new GenericResponse(true, "Found Successfully", projectClassicView, 200, LocalDateTime.now()), HttpStatus.OK);
     }
 
@@ -78,7 +88,10 @@ public class ProjectController {
     })
     @GetMapping(value = "/findByName")
     public ResponseEntity<GenericResponse> findByName(@RequestParam String projectName) {
+        log.debug("Entering /projects/findByName end-point");
         ProjectDetails projectDetails = projectService.findByName(projectName);
+        log.info("Project '"+projectName+"' get successfully");
+        log.debug("Exiting /projects/findByName end-point");
         return new ResponseEntity<>(new GenericResponse(true, "Get", projectDetails, 200, LocalDateTime.now()), HttpStatus.OK);
 
     }
@@ -92,6 +105,10 @@ public class ProjectController {
     })
     @PutMapping(value = "/details/update")
     public ResponseEntity<GenericResponse> updateProjectDetailsViewUpdate(@RequestParam String projectName, @RequestBody ProjectDetailsViewUpdate projectDetailsViewUpdate) {
+        log.debug("Entering /projects/details/update end-point");
+        projectDetailsViewUpdate = projectService.updateProjectDetails(projectName, projectDetailsViewUpdate);
+        log.info("Project '"+projectName+"' Updated successfully");
+        log.debug("Exiting /projects/details/update end-point");
         projectDetailsViewUpdate = projectService.updateProjectDetails(projectName, projectDetailsViewUpdate);
         return new ResponseEntity<>(new GenericResponse(true, "Updated", projectDetailsViewUpdate, 200, LocalDateTime.now()), HttpStatus.OK);
     }
