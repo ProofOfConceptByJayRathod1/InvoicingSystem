@@ -82,4 +82,24 @@ public class DropdownService {
             return companyNameList;
         }
     }
+
+    public List<String> autoSuggestionSalesPersonName(String salesPersonName){
+        List<String> salesPersonNameList = salesPersonRepository.autoSuggestionSalesPersonName(salesPersonName);
+        if(salesPersonNameList.isEmpty()){
+            throw new ResourceNotFoundException("SalesPerson with name "+salesPersonName+" not found");
+        }
+        else{
+            return salesPersonNameList;
+        }
+    }
+
+    public List<String> autoSuggestionCsmName(String csmName){
+        List<String> csmNameList = csmRepository.autoSuggestionCsmName(csmName);
+        if(csmNameList.isEmpty()){
+            throw new ResourceNotFoundException("CsmName with name "+csmName+" not found");
+        }
+        else{
+            return csmNameList;
+        }
+    }
 }

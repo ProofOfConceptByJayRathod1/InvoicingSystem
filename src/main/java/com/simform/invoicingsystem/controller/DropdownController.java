@@ -150,4 +150,30 @@ public class DropdownController {
         return new ResponseEntity<>(new GenericResponse(true, "Found Successfully", companyNameList, 200, LocalDateTime.now()), HttpStatus.OK);
     }
 
+    @Operation(summary = "AutoSuggest SalesPerson Name API", description = "Here, the api will automatically suggest the salesperson based on the value entered by user .", tags = {"Dropdown Controller"})
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "Salesperson found successfully"),
+            @ApiResponse(responseCode = "404", description = "Resource not found"),
+            @ApiResponse(responseCode = "403", description = "Forbidden"),
+            @ApiResponse(responseCode = "401", description = "Unauthorized")
+    })
+    @GetMapping(value = "/autoSuggestion/salesPersonName")
+    public ResponseEntity<GenericResponse> autoSuggestionSalesPersonName(@RequestParam String salesPersonName) {
+        List<String> salesPersonNameList = dropdownService.autoSuggestionSalesPersonName(salesPersonName);
+        return new ResponseEntity<>(new GenericResponse(true, "Found Successfully", salesPersonNameList, 200, LocalDateTime.now()), HttpStatus.OK);
+    }
+
+    @Operation(summary = "AutoSuggest Csm Name API", description = "Here, the api will automatically suggest the csm name based on the value entered by user .", tags = {"Dropdown Controller"})
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "Csm found successfully"),
+            @ApiResponse(responseCode = "404", description = "Resource not found"),
+            @ApiResponse(responseCode = "403", description = "Forbidden"),
+            @ApiResponse(responseCode = "401", description = "Unauthorized")
+    })
+    @GetMapping(value = "/autoSuggestion/csmName")
+    public ResponseEntity<GenericResponse> autoSuggestionCsmName(@RequestParam String csmName) {
+        List<String> csmNameList = dropdownService.autoSuggestionCsmName(csmName);
+        return new ResponseEntity<>(new GenericResponse(true, "Found Successfully", csmNameList, 200, LocalDateTime.now()), HttpStatus.OK);
+    }
+
 }
