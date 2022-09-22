@@ -21,7 +21,7 @@ public class SpecialRate {
   @Id
   @GeneratedValue(strategy = GenerationType.IDENTITY)
   private long id;
-  private String kekaUserId;
+  private String zohoUserId;
   private String rate = "0";
   private LocalDateTime createdAt;
   @Column(length = 40)

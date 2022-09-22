@@ -108,6 +108,10 @@ public class ProjectService {
 
         Project project = projectRepository.findByName(projectName).orElseThrow(() -> new ResourceNotFoundException(projectName + " Project name not found"));
 
+        if (projectRepository.existsByName(projectDetails.getName())) {
+            throw new ProjectAlreadyExistException("Project with name " + projectDetails.getName() + " already exist");
+        }
+
         project.setName(projectDetails.getName());
         project.setActiveBillingFlag(projectDetails.isActiveBillingFlag());
         project.setPayModel(projectDetails.getPayModel());
@@ -117,11 +121,6 @@ public class ProjectService {
         project.setContractLink(projectDetails.getContractLink());
         project.setUpdatedAt(LocalDateTime.now());
         project.setUpdatedBy(SecurityContextHolder.getContext().getAuthentication().getName());
-
-
-        ProjectModel projectModel = projectModelRepository.findByModel(projectDetails.getModel()).orElseThrow(() ->
-                new ResourceNotFoundException(projectDetails.getModel() + " Project Model not found"));
-        project.setProjectModel(projectModel);
 
         Client client = project.getClient();
         client.setName(projectDetails.getClientDetails().getName());
@@ -133,34 +132,20 @@ public class ProjectService {
         client.setPhoneNumber(projectDetails.getClientDetails().getPhoneNumber());
         project.setClient(client);
 
-
-        InvoiceCycle invoiceCycle = invoiceCycleRepository.findByCycle(projectDetails.getCycle()).orElseThrow(
-                () -> new ResourceNotFoundException(projectDetails.getCycle() + " Invoice Cycle not found"));
-        project.setInvoiceCycle(invoiceCycle);
         project.setInvoiceTerm(projectDetails.getInvoiceTerm());
-
-
-        AccType accType = accTypeRepository.findByAccType(projectDetails.getAccType()).orElseThrow(
-                () -> new ResourceNotFoundException(projectDetails.getAccType() + " Account Type not found"));
-        project.setAccType(accType);
-
-        Csm csm = csmRepository.findByName(projectDetails.getCsm()).orElseThrow(() -> new ResourceNotFoundException(projectDetails.getCsm() + " CSM name not found"));
-        project.setCsm(csm);
+        projectModelRepository.findByModel(projectDetails.getModel()).ifPresent(project::setProjectModel);
+        invoiceCycleRepository.findByCycle(projectDetails.getCycle()).ifPresent(project::setInvoiceCycle);
+        accTypeRepository.findByAccType(projectDetails.getAccType()).ifPresent(project::setAccType);
+        csmRepository.findByName(projectDetails.getCsm()).ifPresent(project::setCsm);
+        leadSourceRepository.findBySource(projectDetails.getSource()).ifPresent(project::setLeadSource);
+        marketingChannelRepository.findByChannel(projectDetails.getChannel()).ifPresent(project::setMarketingChannel);
 
         Collection<SalesPerson> salesPeople = new ArrayList<>(
                 projectDetails.getSalesPersons().stream().map(salesPersonName -> salesPersonRepository.findByName(salesPersonName)
                         .orElseThrow(() -> new ResourceNotFoundException(salesPersonName + " SalesPerson name not found"))).toList()
         );
-
         project.setSalesPersons(salesPeople);
 
-        LeadSource leadSource = leadSourceRepository.findBySource(projectDetails.getSource())
-                .orElseThrow(() -> new ResourceNotFoundException(projectDetails.getSource() + " LeadSource name not found"));
-        project.setLeadSource(leadSource);
-
-        MarketingChannel marketingChannel = marketingChannelRepository.findByChannel(projectDetails.getChannel())
-                .orElseThrow(() -> new ResourceNotFoundException(projectDetails.getChannel() + " Marketing Channel not found"));
-        project.setMarketingChannel(marketingChannel);
 
         projectRepository.save(project);
         return projectDetails;

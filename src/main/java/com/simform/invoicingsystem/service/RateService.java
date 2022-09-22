@@ -21,14 +21,15 @@ import java.util.List;
 @Service
 public class RateService {
 
-  private RateRepository rateRepository;
-  private ProjectRepository projectRepository;
+    private RateRepository rateRepository;
+    private ProjectRepository projectRepository;
 
-  private TechStackRepository techStackRepository;
+    private TechStackRepository techStackRepository;
 
-  private SpecialRateRepository specialRateRepository;
+    private SpecialRateRepository specialRateRepository;
 
-    public RateService(RateRepository rateRepository, ProjectRepository projectRepository, TechStackRepository techStackRepository, SpecialRateRepository specialRateRepository) {
+    public RateService(RateRepository rateRepository, ProjectRepository projectRepository, TechStackRepository techStackRepository,
+                       SpecialRateRepository specialRateRepository) {
         this.rateRepository = rateRepository;
         this.projectRepository = projectRepository;
         this.techStackRepository = techStackRepository;
@@ -37,11 +38,8 @@ public class RateService {
 
     public List<RateDetails> updateRate(String projectName, List<RateDetails> rateDetailsList) {
         Project project = projectRepository.findByName(projectName).orElseThrow(() -> new ResourceNotFoundException("Project with name " + projectName + " not found"));
-
         project.getRates().forEach(rate -> {
             rateDetailsList.forEach(rateDetails -> {
-                System.out.println("-------------");
-                System.out.println("rateDetails.getStack(): "+rateDetails.getStack()+" rate.getStack(): "+rate.getStack());
                 if (rateDetails.getStack().equalsIgnoreCase(rate.getStack())) {
                     rate.setRate(rateDetails.getRate());
                     rate.setUpdatedAt(LocalDateTime.now());
@@ -56,32 +54,30 @@ public class RateService {
     }
 
 
+    public Collection<SpecialRateDetails> updateSpecialRate(String projectName, Collection<SpecialRateDetails> specialRateDetails) {
+        Project project = projectRepository.findByName(projectName).orElseThrow(() -> new ResourceNotFoundException(projectName + " Project name not found."));
+        LocalDateTime now = LocalDateTime.now();
+        project.getSpecialRates().forEach(specialRate -> {
+            specialRate.setDeletedAt(now);
+            specialRate.setDeletedBy(SecurityContextHolder.getContext().getAuthentication().getName());
+            specialRate.setIsDeleted(true);
+            specialRateRepository.save(specialRate);
+        });
 
-  public Collection<SpecialRateDetails> updateSpecialRate(String projectName, Collection<SpecialRateDetails> specialRateDetails) {
-    Project project = projectRepository.findByName(projectName).orElseThrow(() -> new ResourceNotFoundException(projectName + " Project name not found."));
-    LocalDateTime now = LocalDateTime.now();
-    project.getSpecialRates().forEach(specialRate -> {
-      specialRate.setDeletedAt(now);
-      specialRate.setDeletedBy(SecurityContextHolder.getContext().getAuthentication().getName());
-      specialRate.setIsDeleted(true);
-      specialRateRepository.save(specialRate);
-    });
+        Collection<SpecialRate> specialRates = new ArrayList<>(
+                specialRateDetails.stream().map(specialRateDetail -> {
+                    SpecialRate specialRate = new SpecialRate();
+                    specialRate.setRate(specialRateDetail.getRate());
+                    specialRate.setZohoUserId(specialRateDetail.getZohoUserId());
+                    specialRate.setCreatedAt(now);
+                    specialRate.setCreatedBy(SecurityContextHolder.getContext().getAuthentication().getName());
+                    specialRate.setIsDeleted(false);
+                    return specialRateRepository.save(specialRate);
+                }).toList());
 
-        Collection<SpecialRate> specialRates= new ArrayList<>(
-          specialRateDetails.stream().map(specialRateDetail -> {
-            SpecialRate specialRate = new SpecialRate();
-            specialRate.setRate(specialRateDetail.getRate());
-            specialRate.setKekaUserId(specialRateDetail.getKekaUserId());
-            specialRate.setCreatedAt(now);
-            specialRate.setCreatedBy(SecurityContextHolder.getContext().getAuthentication().getName());
-            specialRate.setIsDeleted(false);
-            return specialRateRepository.save(specialRate);
-          }).toList());
-
-    project.setSpecialRates(specialRates);
-
-    projectRepository.save(project);
-    return specialRateDetails;
-  }
+        project.setSpecialRates(specialRates);
+        projectRepository.save(project);
+        return specialRateDetails;
+    }
 
 }

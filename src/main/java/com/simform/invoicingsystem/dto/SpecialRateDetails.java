@@ -9,5 +9,5 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 public class SpecialRateDetails {
     private String rate;
-    private String kekaUserId;
+    private String zohoUserId;
 }

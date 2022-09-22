@@ -20,11 +20,12 @@ public class DropdownController {
     public DropdownController(DropdownService dropdownService) {
         this.dropdownService = dropdownService;
     }
+
     @Operation(summary = "Get CSM Name API", description = "Here, all the attributes of the CSM dropdown will be retrieved.", tags = {"Dropdown Controller"})
     @ApiResponses(value = {
-      @ApiResponse(responseCode = "200", description = "Retrieved all the CSM data successfully"),
-      @ApiResponse(responseCode = "403", description = "Forbidden"),
-      @ApiResponse(responseCode = "401", description = "Unauthorized")
+            @ApiResponse(responseCode = "200", description = "Retrieved all the CSM data successfully"),
+            @ApiResponse(responseCode = "403", description = "Forbidden"),
+            @ApiResponse(responseCode = "401", description = "Unauthorized")
     })
     @GetMapping("/getCsm")
     public List<String> getCsm() {
@@ -34,9 +35,9 @@ public class DropdownController {
 
     @Operation(summary = "Get SalesPerson Name API", description = "Here, all the attributes of the SalesPerson dropdown will be retrieved.", tags = {"Dropdown Controller"})
     @ApiResponses(value = {
-      @ApiResponse(responseCode = "200", description = "Retrieved all the SalesPerson data successfully"),
-      @ApiResponse(responseCode = "403", description = "Forbidden"),
-      @ApiResponse(responseCode = "401", description = "Unauthorized")
+            @ApiResponse(responseCode = "200", description = "Retrieved all the SalesPerson data successfully"),
+            @ApiResponse(responseCode = "403", description = "Forbidden"),
+            @ApiResponse(responseCode = "401", description = "Unauthorized")
     })
     @GetMapping("/getSalesPerson")
     public List<String> getSalesPerson() {
@@ -47,9 +48,9 @@ public class DropdownController {
 
     @Operation(summary = "Get LeadSource Name API", description = "Here, all the attributes of the LeadSource dropdown will be retrieved.", tags = {"Dropdown Controller"})
     @ApiResponses(value = {
-      @ApiResponse(responseCode = "200", description = "Retrieved all the LeadSource data successfully"),
-      @ApiResponse(responseCode = "403", description = "Forbidden"),
-      @ApiResponse(responseCode = "401", description = "Unauthorized")
+            @ApiResponse(responseCode = "200", description = "Retrieved all the LeadSource data successfully"),
+            @ApiResponse(responseCode = "403", description = "Forbidden"),
+            @ApiResponse(responseCode = "401", description = "Unauthorized")
     })
     @GetMapping("/getLeadSource")
     public List<String> getLeadSource() {
@@ -59,9 +60,9 @@ public class DropdownController {
 
     @Operation(summary = "Get MarketingChannel Name API", description = "Here, all the attributes of the MarketingChannel dropdown will be retrieved.", tags = {"Dropdown Controller"})
     @ApiResponses(value = {
-      @ApiResponse(responseCode = "200", description = "Retrieved all the MarketingChannel data successfully"),
-      @ApiResponse(responseCode = "403", description = "Forbidden"),
-      @ApiResponse(responseCode = "401", description = "Unauthorized")
+            @ApiResponse(responseCode = "200", description = "Retrieved all the MarketingChannel data successfully"),
+            @ApiResponse(responseCode = "403", description = "Forbidden"),
+            @ApiResponse(responseCode = "401", description = "Unauthorized")
     })
     @GetMapping("/getMarketingChannel")
     public List<String> getMarketingChannel() {
@@ -71,60 +72,60 @@ public class DropdownController {
 
     @Operation(summary = "Get ProjectModel Name API", description = "Here, all the attributes of the ProjectModel dropdown will be retrieved.", tags = {"Dropdown Controller"})
     @ApiResponses(value = {
-      @ApiResponse(responseCode = "200", description = "Retrieved all the ProjectModel data successfully"),
-      @ApiResponse(responseCode = "403", description = "Forbidden"),
-      @ApiResponse(responseCode = "401", description = "Unauthorized")
+            @ApiResponse(responseCode = "200", description = "Retrieved all the ProjectModel data successfully"),
+            @ApiResponse(responseCode = "403", description = "Forbidden"),
+            @ApiResponse(responseCode = "401", description = "Unauthorized")
     })
     @GetMapping(value = "/getProjectModel")
-    public List<String> getProjectModel(){
+    public List<String> getProjectModel() {
         log.debug("Entering /getProjectModel end-point");
         return dropdownService.getProjectModel();
     }
 
     @Operation(summary = "Get InvoiceCycle Name API", description = "Here, all the attributes of the InvoiceCycle dropdown will be retrieved.", tags = {"Dropdown Controller"})
     @ApiResponses(value = {
-      @ApiResponse(responseCode = "200", description = "Retrieved all the InvoiceCycle data successfully"),
-      @ApiResponse(responseCode = "403", description = "Forbidden"),
-      @ApiResponse(responseCode = "401", description = "Unauthorized")
+            @ApiResponse(responseCode = "200", description = "Retrieved all the InvoiceCycle data successfully"),
+            @ApiResponse(responseCode = "403", description = "Forbidden"),
+            @ApiResponse(responseCode = "401", description = "Unauthorized")
     })
     @GetMapping(value = "/getInvoiceCycle")
-    public List<String> getInvoiceCycle(){
+    public List<String> getInvoiceCycle() {
         log.debug("Entering /getInvoiceCycle end-point");
         return dropdownService.getInvoiceCycle();
     }
 
     @Operation(summary = "Get AccType Name API", description = "Here, all the attributes of the AccType dropdown will be retrieved.", tags = {"Dropdown Controller"})
     @ApiResponses(value = {
-      @ApiResponse(responseCode = "200", description = "Retrieved all the AccType data successfully"),
-      @ApiResponse(responseCode = "403", description = "Forbidden"),
-      @ApiResponse(responseCode = "401", description = "Unauthorized")
+            @ApiResponse(responseCode = "200", description = "Retrieved all the AccType data successfully"),
+            @ApiResponse(responseCode = "403", description = "Forbidden"),
+            @ApiResponse(responseCode = "401", description = "Unauthorized")
     })
     @GetMapping(value = "/getAccType")
-    public List<String> getAccType(){
+    public List<String> getAccType() {
         log.debug("Entering /getAccType end-point");
         return dropdownService.getAccType();
     }
 
     @Operation(summary = "Get PayModel Name API", description = "Here, all the attributes of the PayModel dropdown will be retrieved.", tags = {"Dropdown Controller"})
     @ApiResponses(value = {
-      @ApiResponse(responseCode = "200", description = "Retrieved all the PayModel data successfully"),
-      @ApiResponse(responseCode = "403", description = "Forbidden"),
-      @ApiResponse(responseCode = "401", description = "Unauthorized")
+            @ApiResponse(responseCode = "200", description = "Retrieved all the PayModel data successfully"),
+            @ApiResponse(responseCode = "403", description = "Forbidden"),
+            @ApiResponse(responseCode = "401", description = "Unauthorized")
     })
     @GetMapping(value = "/getPayModel")
-    public List<String> getPayModel(){
+    public List<String> getPayModel() {
         log.debug("Entering /getPayModel end-point");
         return dropdownService.getPayModel();
     }
 
     @Operation(summary = "Get Active Billing Name API", description = "Here, all the attributes of the Active Billing dropdown will be retrieved.", tags = {"Dropdown Controller"})
     @ApiResponses(value = {
-      @ApiResponse(responseCode = "200", description = "Retrieved all the ActiveBilling data successfully"),
-      @ApiResponse(responseCode = "403", description = "Forbidden"),
-      @ApiResponse(responseCode = "401", description = "Unauthorized")
+            @ApiResponse(responseCode = "200", description = "Retrieved all the ActiveBilling data successfully"),
+            @ApiResponse(responseCode = "403", description = "Forbidden"),
+            @ApiResponse(responseCode = "401", description = "Unauthorized")
     })
     @GetMapping(value = "/getActiveBilling")
-    public List<String> getActiveBilling(){
+    public List<String> getActiveBilling() {
         log.debug("Entering /getActiveBilling");
         return dropdownService.getActiveBilling();
     }

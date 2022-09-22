@@ -14,4 +14,6 @@ public interface ProjectRepository extends JpaRepository<Project, Long> {
 
     @Query("SELECT p FROM Project p WHERE lower(p.name) LIKE lower(CONCAT('%' , ?1 , '%'))")
     List<Project> searchProjectByName(String projectName);
+
+    boolean existsByName(String name);
 }
