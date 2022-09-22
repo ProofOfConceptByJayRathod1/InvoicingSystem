@@ -1,6 +1,9 @@
 package com.simform.invoicingsystem.controller;
 
-import com.simform.invoicingsystem.dto.*;
+import com.simform.invoicingsystem.dto.GenericResponse;
+import com.simform.invoicingsystem.dto.ProjectClassicViewResponse;
+import com.simform.invoicingsystem.dto.ProjectDetails;
+import com.simform.invoicingsystem.dto.ProjectDetailsViewUpdate;
 import com.simform.invoicingsystem.service.ProjectService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
@@ -12,8 +15,8 @@ import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 import java.time.LocalDateTime;
-import java.util.List;
 
+@CrossOrigin(originPatterns = "*")
 @RestController
 @RequestMapping("/projects")
 @Slf4j
@@ -66,13 +69,14 @@ public class ProjectController {
             @ApiResponse(responseCode = "401", description = "Unauthorized")
 
     })
-    @GetMapping(value = "/searchProject")
-    public ResponseEntity<GenericResponse> searchProject(@RequestParam String projectName) {
-        log.debug("Entering /projects/searchProject end-point");
-        List<ProjectClassicView> projectClassicView = projectService.searchProject(projectName);
+    @GetMapping(value = "/search")
+    public ResponseEntity<GenericResponse> searchProject(@RequestParam String projectName,
+                                                         @RequestParam(value = "pageNo", defaultValue = "1") int pageNo, @RequestParam(value = "pageSize", defaultValue = "10") int pageSize) {
+        log.debug("Entering /projects/search end-point");
+        ProjectClassicViewResponse projectClassicViewResponse = projectService.searchProject(projectName, pageNo, pageSize);
         log.info("Project Name with '" + projectName + "' found successfully");
-        log.debug("Exiting /projects/searchProject end-point");
-        return new ResponseEntity<>(new GenericResponse(true, "Found Successfully", projectClassicView, 200, LocalDateTime.now()), HttpStatus.OK);
+        log.debug("Exiting /projects/search end-point");
+        return new ResponseEntity<>(new GenericResponse(true, "Found Successfully", projectClassicViewResponse, 200, LocalDateTime.now()), HttpStatus.OK);
     }
 
     @Operation(summary = "Project Find By Name API", description = "Here, all project details will be returned.", tags = {"Project Controller"})
@@ -116,10 +120,10 @@ public class ProjectController {
             @ApiResponse(responseCode = "404", description = "Resource not found")
     })
     @GetMapping("/")
-    public ResponseEntity<GenericResponse> viewProjects(@RequestParam(value = "pageNo", defaultValue = "1") int pageNo, @RequestParam(value = "pageSize", defaultValue = "10") int pageSize,
-                                                        @RequestParam(value = "sortBy", defaultValue = "name") String sortBy, @RequestParam(value = "order", defaultValue = "ASC") String order) {
+    public ResponseEntity<GenericResponse> viewProjects(@RequestParam(value = "pageNo", defaultValue = "1") int pageNo, @RequestParam(value = "pageSize", defaultValue = "10") int pageSize) {
         log.debug("Entering /projects/ end-point");
-        ProjectClassicViewResponse projects = projectService.viewProjects(pageNo, pageSize, sortBy, order);
+        ProjectClassicViewResponse projects = projectService.viewProjects(pageNo, pageSize);
+        log.info("Project fetched successfully");
         log.debug("Exiting /projects/ end-point");
         return new ResponseEntity<>(new GenericResponse(true, "Fetched", projects, 200, LocalDateTime.now()), HttpStatus.OK);
     }

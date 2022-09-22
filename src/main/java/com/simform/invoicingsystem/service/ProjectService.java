@@ -12,13 +12,14 @@ import org.modelmapper.ModelMapper;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
-import org.springframework.data.domain.Sort;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDateTime;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.List;
 
 
 @Service
@@ -199,14 +200,20 @@ public class ProjectService {
         return projectDetails;
     }
 
-    public List<ProjectClassicView> searchProject(String projectName) {
-        List<Project> projects = projectRepository.searchProjectByName(projectName);
+    public ProjectClassicViewResponse searchProject(String projectName, int pageNo, int pageSize) {
+        Pageable pageable = PageRequest.of(pageNo != 0 ? pageNo - 1 : 0, pageSize != 0 ? pageSize : 10);
+        Page<Project> projects = projectRepository.searchProjectByName(projectName, pageable);
+
         if (projects.isEmpty()) {
             throw new ResourceNotFoundException(projectName + " Project Name not found");
         } else {
-            return projectRepository.searchProjectByName(projectName).stream().map(project -> new ProjectClassicView(project.getName(),
-                    project.getProjectModel().getModel(), project.getClient().getName(), project.getClient().getEmail(),
-                    project.getInvoiceCycle().getCycle(), project.getPayModel(), project.getAccType().getAccType())).toList();
+            List<ProjectClassicView> projectClassicViews = projects.getContent().stream()
+                    .map(project -> new ProjectClassicView(project.getName(), project.getProjectModel().getModel(),
+                            project.getClient().getName(), project.getClient().getEmail(),
+                            project.getInvoiceCycle().getCycle(), project.getPayModel(),
+                            project.getAccType().getAccType())).toList();
+
+            return new ProjectClassicViewResponse(projectClassicViews, projects.getTotalPages(), projects.getTotalElements());
         }
     }
 
@@ -242,20 +249,16 @@ public class ProjectService {
         return projectDetailsViewUpdate;
     }
 
-    public ProjectClassicViewResponse viewProjects(int pageNo, int pageSize, String sortBy, String order) {
+    public ProjectClassicViewResponse viewProjects(int pageNo, int pageSize) {
 
-        sortBy = Objects.equals(sortBy, "") || sortBy == null ? "name" : sortBy;
-        order = Objects.equals(order, "") || order == null ? "ASC" : order;
-        Pageable pageable = PageRequest.of(pageNo != 0 ? pageNo - 1 : 0, pageSize != 0 ? pageSize : 10, Sort.Direction.valueOf(order.toUpperCase()), sortBy);
+        Pageable pageable = PageRequest.of(pageNo != 0 ? pageNo - 1 : 0, pageSize != 0 ? pageSize : 10);
         Page<Project> projects = projectRepository.findAll(pageable);
 
         List<ProjectClassicView> projectClassicViews = projects.getContent().stream()
-                .map(project ->
-                        new ProjectClassicView(project.getName(), project.getProjectModel().getModel(),
-                                project.getClient().getName(), project.getClient().getEmail(),
-                                project.getInvoiceCycle().getCycle(), project.getPayModel(),
-                                project.getAccType().getAccType())).toList();
-
+                .map(project -> new ProjectClassicView(project.getName(), project.getProjectModel().getModel(),
+                        project.getClient().getName(), project.getClient().getEmail(),
+                        project.getInvoiceCycle().getCycle(), project.getPayModel(),
+                        project.getAccType().getAccType())).toList();
 
         return new ProjectClassicViewResponse(projectClassicViews, projects.getTotalPages(), projects.getTotalElements());
     }

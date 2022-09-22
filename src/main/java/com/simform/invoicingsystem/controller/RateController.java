@@ -18,6 +18,7 @@ import java.util.Collection;
 import java.util.List;
 
 
+@CrossOrigin(originPatterns = "*")
 @RestController
 @RequestMapping("/projects/rates")
 @Slf4j
