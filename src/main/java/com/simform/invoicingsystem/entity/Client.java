@@ -1,5 +1,6 @@
 package com.simform.invoicingsystem.entity;
 
+import com.simform.invoicingsystem.validation.NameValidation;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -17,10 +18,8 @@ public class Client {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-    @Column(length = 50)
+    @NameValidation
     private String name;
-    @Column(length = 50)
-    private String companyName;
     @Column(length = 100)
     private String email;
     @Column(length = 20)
@@ -41,4 +40,6 @@ public class Client {
     @Column(length = 40)
     private String deletedBy;
 
+    @ManyToOne(cascade = {CascadeType.MERGE, CascadeType.PERSIST}, fetch = FetchType.EAGER, targetEntity = Company.class)
+    private Company Company;
 }

@@ -1,10 +1,12 @@
 package com.simform.invoicingsystem.entity;
 
+import com.simform.invoicingsystem.validation.NotEmpty;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
+import javax.validation.constraints.NotNull;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.Collection;
@@ -19,6 +21,8 @@ public class Project {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;
+    @NotNull
+    private String zohoProjectId;
     private String defaultRate;
     @Column(length = 20, nullable = false)
     private String name;
