@@ -19,7 +19,6 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDateTime;
 import java.util.*;
-import java.util.stream.Collectors;
 
 
 @Service
@@ -38,12 +37,14 @@ public class ProjectService {
     private final MarketingChannelRepository marketingChannelRepository;
     private final TechStackRepository techStackRepository;
 
+    private final CompanyRepository companyRepository;
     private final RateRepository rateRepository;
 
     public ProjectService(ModelMapper mapper, ProjectRepository projectRepository, ProjectModelRepository projectModelRepository,
                           ClientService clientService, InvoiceCycleRepository invoiceCycleRepository, AccTypeRepository accTypeRepository,
                           CsmRepository csmRepository, SalesPersonRepository salesPersonRepository, LeadSourceRepository leadSourceRepository,
-                          MarketingChannelRepository marketingChannelRepository, TechStackRepository techStackRepository, RateRepository rateRepository) {
+                          MarketingChannelRepository marketingChannelRepository, TechStackRepository techStackRepository, CompanyRepository companyRepository,
+                          RateRepository rateRepository) {
         this.mapper = mapper;
         this.projectRepository = projectRepository;
         this.projectModelRepository = projectModelRepository;
@@ -55,6 +56,7 @@ public class ProjectService {
         this.leadSourceRepository = leadSourceRepository;
         this.marketingChannelRepository = marketingChannelRepository;
         this.techStackRepository = techStackRepository;
+        this.companyRepository = companyRepository;
         this.rateRepository = rateRepository;
     }
 
@@ -69,16 +71,14 @@ public class ProjectService {
         project.setCreatedAt(now);
         project.setCreatedBy(createdBy);
         project.setActive(true);
+        project.setCreatedAt(now);
+        project.setCreatedBy(createdBy);
 
         projectModelRepository.findByModel(project.getProjectModel().getModel()).ifPresent(project::setProjectModel);
         invoiceCycleRepository.findByCycle(projectDetails.getCycle()).ifPresent(project::setInvoiceCycle);
         accTypeRepository.findByAccType(projectDetails.getAccType()).ifPresent(project::setAccType);
         leadSourceRepository.findBySource(projectDetails.getLeadSource()).ifPresent(project::setLeadSource);
         marketingChannelRepository.findByChannel(projectDetails.getChannel()).ifPresent(project::setMarketingChannel);
-        csmRepository.findByName(projectDetails.getCsm()).ifPresent(project::setCsm);
-
-        project.setCreatedAt(LocalDateTime.now());
-        project.setCreatedBy(SecurityContextHolder.getContext().getAuthentication().getName());
 
         project.setRates(
                 techStackRepository.findAll().stream().map(techStackRate -> {
@@ -92,25 +92,47 @@ public class ProjectService {
                 }).toList()
         );
 
-
-        project.setSalesPersons(
-                projectDetails.getSalesPersons().stream()
-                        .map(salesPersonRepository::findByName)
-                        .filter(Optional::isPresent).map(Optional::get).toList()
+        project.setCsm(
+                csmRepository.findByName(projectDetails.getCsm()).orElseGet(() -> {
+                    Csm csm = new Csm();
+                    csm.setName(projectDetails.getCsm());
+                    csm.setCreatedAt(now);
+                    csm.setCreatedBy(createdBy);
+                    return csmRepository.save(csm);
+                })
         );
+
+
+        Collection<SalesPerson> salesPeople = new ArrayList<>(
+                projectDetails.getSalesPersons().stream().map(salesPersonName ->
+                        salesPersonRepository.findByName(salesPersonName)
+                                .orElseGet(() -> {
+                                    SalesPerson salesPerson = new SalesPerson();
+                                    salesPerson.setName(salesPersonName);
+                                    salesPerson.setCreatedAt(now);
+                                    salesPerson.setCreatedBy(createdBy);
+                                    return salesPersonRepository.save(salesPerson);
+                                })
+                ).toList());
+        project.setSalesPersons(salesPeople);
+
 
         project.setClient(clientService.addClient(projectDetails.getClientDetails()));
         projectRepository.save(project);
         return projectDetails;
     }
 
-    public ProjectDetails updateProject(ProjectDetails projectDetails, String projectName) {
+    public ProjectDetails updateProject(ProjectDetails projectDetails) {
 
+        String projectName = projectDetails.getName();
         Project project = projectRepository.findByName(projectName).orElseThrow(() -> new ResourceNotFoundException(projectName + " Project name not found"));
 
         if (projectRepository.existsByName(projectDetails.getName())) {
             throw new ProjectAlreadyExistException("Project with name " + projectDetails.getName() + " already exist");
         }
+        String createdBy = SecurityContextHolder.getContext().getAuthentication().getName();
+        LocalDateTime now = LocalDateTime.now();
+
 
         project.setName(projectDetails.getName());
         project.setActiveBillingFlag(projectDetails.isActiveBillingFlag());
@@ -124,7 +146,17 @@ public class ProjectService {
 
         Client client = project.getClient();
         client.setName(projectDetails.getClientDetails().getName());
-        client.setCompanyName(projectDetails.getClientDetails().getCompanyName());
+        client.setCompany(
+                companyRepository.findByName(projectDetails.getClientDetails().getCompanyName()).orElseGet(() -> {
+                    Company company = new Company();
+                    company.setName(projectDetails.getClientDetails().getCompanyName());
+
+                    company.setCreatedAt(now);
+                    company.setCreatedBy(createdBy);
+                    return companyRepository.save(company);
+                })
+        );
+
         client.setEmail(projectDetails.getClientDetails().getEmail());
         client.setCity(projectDetails.getClientDetails().getCity());
         client.setState(projectDetails.getClientDetails().getState());
@@ -136,17 +168,33 @@ public class ProjectService {
         projectModelRepository.findByModel(projectDetails.getModel()).ifPresent(project::setProjectModel);
         invoiceCycleRepository.findByCycle(projectDetails.getCycle()).ifPresent(project::setInvoiceCycle);
         accTypeRepository.findByAccType(projectDetails.getAccType()).ifPresent(project::setAccType);
-        csmRepository.findByName(projectDetails.getCsm()).ifPresent(project::setCsm);
         leadSourceRepository.findBySource(projectDetails.getSource()).ifPresent(project::setLeadSource);
         marketingChannelRepository.findByChannel(projectDetails.getChannel()).ifPresent(project::setMarketingChannel);
 
-        Collection<SalesPerson> salesPeople = new ArrayList<>(
-                projectDetails.getSalesPersons().stream().map(salesPersonName -> salesPersonRepository.findByName(salesPersonName)
-                        .orElseThrow(() -> new ResourceNotFoundException(salesPersonName + " SalesPerson name not found"))).toList()
+
+        project.setCsm(
+                csmRepository.findByName(projectDetails.getCsm()).orElseGet(() -> {
+                    Csm csm = new Csm();
+                    csm.setName(projectDetails.getCsm());
+                    csm.setCreatedAt(now);
+                    csm.setCreatedBy(createdBy);
+                    return csmRepository.save(csm);
+                })
         );
+
+
+        Collection<SalesPerson> salesPeople = new ArrayList<>(
+                projectDetails.getSalesPersons().stream().map(salesPersonName ->
+                        salesPersonRepository.findByName(salesPersonName)
+                                .orElseGet(() -> {
+                                    SalesPerson salesPerson = new SalesPerson();
+                                    salesPerson.setName(salesPersonName);
+                                    salesPerson.setCreatedAt(now);
+                                    salesPerson.setCreatedBy(createdBy);
+                                    return salesPersonRepository.save(salesPerson);
+                                })
+                ).toList());
         project.setSalesPersons(salesPeople);
-
-
         projectRepository.save(project);
         return projectDetails;
     }
@@ -169,8 +217,8 @@ public class ProjectService {
         return mapper.map(project, ProjectDetails.class);
     }
 
-    public ProjectDetailsViewUpdate updateProjectDetails(String projectName, ProjectDetailsViewUpdate projectDetailsViewUpdate) {
-
+    public ProjectDetailsViewUpdate updateProjectDetails(ProjectDetailsViewUpdate projectDetailsViewUpdate) {
+        String projectName = projectDetailsViewUpdate.getName();
         Project project = projectRepository.findByName(projectName).orElseThrow(() ->
                 new ResourceNotFoundException("Project with name " + projectName + " not found")
         );
@@ -178,8 +226,15 @@ public class ProjectService {
         project.setDefaultRate(projectDetailsViewUpdate.getDefaultRate());
         project.setName(projectDetailsViewUpdate.getName());
         project.getClient().setName(projectDetailsViewUpdate.getClientName());
-        project.getClient().setCompanyName(projectDetailsViewUpdate.getCompanyName());
-
+        project.getClient().setCompany(
+                companyRepository.findByName(projectDetailsViewUpdate.getCompanyName()).orElseGet(() -> {
+                    Company company = new Company();
+                    company.setName(projectDetailsViewUpdate.getCompanyName());
+                    company.setCreatedAt(LocalDateTime.now());
+                    company.setCreatedBy(SecurityContextHolder.getContext().getAuthentication().getName());
+                    return companyRepository.save(company);
+                })
+        );
         csmRepository.findByName(projectDetailsViewUpdate.getCsm()).ifPresent(project::setCsm);
         projectModelRepository.findByModel(projectDetailsViewUpdate.getModel()).ifPresent(project::setProjectModel);
 
@@ -188,13 +243,20 @@ public class ProjectService {
     }
 
     public ProjectClassicViewResponse viewProjects(int pageNo, int pageSize, String sortBy, String order) {
+
         sortBy = Objects.equals(sortBy, "") || sortBy == null ? "name" : sortBy;
         order = Objects.equals(order, "") || order == null ? "ASC" : order;
         Pageable pageable = PageRequest.of(pageNo != 0 ? pageNo - 1 : 0, pageSize != 0 ? pageSize : 10, Sort.Direction.valueOf(order.toUpperCase()), sortBy);
         Page<Project> projects = projectRepository.findAll(pageable);
-        List<ProjectClassicView> projectClassicViews = projects.getContent().stream().map(project -> new ProjectClassicView(project.getName(),
-                project.getProjectModel().getModel(), project.getClient().getName(), project.getClient().getEmail(),
-                project.getInvoiceCycle().getCycle(), project.getPayModel(), project.getAccType().getAccType())).collect(Collectors.toList());
+
+        List<ProjectClassicView> projectClassicViews = projects.getContent().stream()
+                .map(project ->
+                        new ProjectClassicView(project.getName(), project.getProjectModel().getModel(),
+                                project.getClient().getName(), project.getClient().getEmail(),
+                                project.getInvoiceCycle().getCycle(), project.getPayModel(),
+                                project.getAccType().getAccType())).toList();
+
+
         return new ProjectClassicViewResponse(projectClassicViews, projects.getTotalPages(), projects.getTotalElements());
     }
 }

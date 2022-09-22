@@ -10,6 +10,7 @@ import org.springframework.validation.annotation.Validated;
 
 import javax.validation.Valid;
 import javax.validation.constraints.Min;
+import javax.validation.constraints.NotNull;
 import java.time.LocalDate;
 import java.util.Collection;
 
@@ -20,6 +21,9 @@ import java.util.Collection;
 public class ProjectDetails {
     @NameValidation
     private String name;
+    @NotNull
+    private String zohoProjectId;
+    private String defaultRate;
     private String model;
     @Valid
     private ClientDetails clientDetails;

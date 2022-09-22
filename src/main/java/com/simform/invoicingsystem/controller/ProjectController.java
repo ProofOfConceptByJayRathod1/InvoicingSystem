@@ -49,9 +49,9 @@ public class ProjectController {
             @ApiResponse(responseCode = "401", description = "Unauthorized")
     })
     @PutMapping(value = "/update/{projectName}")
-    public ResponseEntity<GenericResponse> updateProject(@RequestBody ProjectDetails projectDetails, @PathVariable("projectName") String projectName) {
+    public ResponseEntity<GenericResponse> updateProject(@RequestBody ProjectDetails projectDetails) {
         log.debug("Entering /projects/update/{projectName} end-point");
-        projectDetails = projectService.updateProject(projectDetails, projectName);
+        projectDetails = projectService.updateProject(projectDetails);
         log.info("Project '" + projectDetails.getName() + "' Updated successfully");
         log.debug("Exiting /projects/update/{projectName} end-point");
         return new ResponseEntity<>(new GenericResponse(true, "Updated", projectDetails, 200, LocalDateTime.now()), HttpStatus.OK);
@@ -100,10 +100,10 @@ public class ProjectController {
             @ApiResponse(responseCode = "401", description = "Unauthorized")
     })
     @PutMapping(value = "/details/update")
-    public ResponseEntity<GenericResponse> updateProjectDetailsViewUpdate(@RequestParam String projectName, @RequestBody ProjectDetailsViewUpdate projectDetailsViewUpdate) {
+    public ResponseEntity<GenericResponse> updateProjectDetailsViewUpdate(@RequestBody ProjectDetailsViewUpdate projectDetailsViewUpdate) {
         log.debug("Entering /projects/details/update end-point");
-        projectDetailsViewUpdate = projectService.updateProjectDetails(projectName, projectDetailsViewUpdate);
-        log.info("Project '" + projectName + "' Updated successfully");
+        projectDetailsViewUpdate = projectService.updateProjectDetails(projectDetailsViewUpdate);
+        log.info("Project '" + projectDetailsViewUpdate.getName() + "' Updated successfully");
         log.debug("Exiting /projects/details/update end-point");
         return new ResponseEntity<>(new GenericResponse(true, "Updated", projectDetailsViewUpdate, 200, LocalDateTime.now()), HttpStatus.OK);
     }
