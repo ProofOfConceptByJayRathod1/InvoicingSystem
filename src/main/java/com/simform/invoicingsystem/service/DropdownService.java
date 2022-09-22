@@ -1,6 +1,7 @@
 package com.simform.invoicingsystem.service;
 
 import com.simform.invoicingsystem.entity.*;
+import com.simform.invoicingsystem.exception.ResourceNotFoundException;
 import com.simform.invoicingsystem.repository.*;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -20,10 +21,11 @@ public class DropdownService {
     private SalesPersonRepository salesPersonRepository;
     private LeadSourceRepository leadSourceRepository;
     private MarketingChannelRepository marketingChannelRepository;
+    private CompanyRepository companyRepository;
 
-    public DropdownService(ProjectModelRepository projectModelRepository, InvoiceCycleRepository invoiceCycleRepository,
-                           AccTypeRepository accTypeRepository, CsmRepository csmRepository, SalesPersonRepository salesPersonRepository,
-                           LeadSourceRepository leadSourceRepository, MarketingChannelRepository marketingChannelRepository) {
+    public DropdownService(ProjectModelRepository projectModelRepository, InvoiceCycleRepository invoiceCycleRepository, AccTypeRepository accTypeRepository,
+                           CsmRepository csmRepository, SalesPersonRepository salesPersonRepository, LeadSourceRepository leadSourceRepository,
+                           MarketingChannelRepository marketingChannelRepository, CompanyRepository companyRepository) {
         this.projectModelRepository = projectModelRepository;
         this.invoiceCycleRepository = invoiceCycleRepository;
         this.accTypeRepository = accTypeRepository;
@@ -31,6 +33,7 @@ public class DropdownService {
         this.salesPersonRepository = salesPersonRepository;
         this.leadSourceRepository = leadSourceRepository;
         this.marketingChannelRepository = marketingChannelRepository;
+        this.companyRepository = companyRepository;
     }
 
     public List<String> getCsm() {
@@ -67,5 +70,16 @@ public class DropdownService {
 
     public List<String> getActiveBilling() {
         return Arrays.asList("Yes", "No");
+    }
+
+    public List<String> autoSuggestionCompanyName(String companyName) {
+        List<String> companyNameList = companyRepository.autoSuggestionCompanyName(companyName);
+        if (companyNameList.isEmpty())
+        {
+            throw new ResourceNotFoundException("Company with name "+companyName+" not found");
+        }
+        else {
+            return companyNameList;
+        }
     }
 }

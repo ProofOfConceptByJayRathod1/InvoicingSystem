@@ -1,14 +1,20 @@
 package com.simform.invoicingsystem.controller;
 
+import com.simform.invoicingsystem.dto.GenericResponse;
+import com.simform.invoicingsystem.dto.ProjectClassicView;
 import com.simform.invoicingsystem.service.DropdownService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.time.LocalDateTime;
 import java.util.List;
 
 @Slf4j
@@ -128,6 +134,20 @@ public class DropdownController {
     public List<String> getActiveBilling() {
         log.debug("Entering /getActiveBilling");
         return dropdownService.getActiveBilling();
+    }
+
+    @Operation(summary = "AutoSuggest Company Name API", description = "Here, the api will automatically suggest the company name based on the value entered by user .", tags = {"Dropdown Controller"})
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "Company found successfully"),
+            @ApiResponse(responseCode = "404", description = "Resource not found"),
+            @ApiResponse(responseCode = "403", description = "Forbidden"),
+            @ApiResponse(responseCode = "401", description = "Unauthorized")
+
+    })
+    @GetMapping(value = "/autoSuggestion/companyName")
+    public ResponseEntity<GenericResponse> autoSuggestionCompanyName(@RequestParam String companyName) {
+        List<String> companyNameList = dropdownService.autoSuggestionCompanyName(companyName);
+        return new ResponseEntity<>(new GenericResponse(true, "Found Successfully", companyNameList, 200, LocalDateTime.now()), HttpStatus.OK);
     }
 
 }
