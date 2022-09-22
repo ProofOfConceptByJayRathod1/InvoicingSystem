@@ -28,8 +28,4 @@ public class SalesPerson {
     private LocalDateTime deletedAt;
     @Column(length = 40)
     private String deletedBy;
-
-    public SalesPerson(String abc) {
-        this.name = abc;
-    }
 }

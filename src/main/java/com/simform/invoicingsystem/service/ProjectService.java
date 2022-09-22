@@ -63,8 +63,13 @@ public class ProjectService {
 
     public ProjectDetails addProject(ProjectDetails projectDetails) {
         if (projectRepository.findByName(projectDetails.getName()).isPresent()) {
-            throw new ProjectAlreadyExistException("Project with name " + projectDetails.getName() + " already exist");
+            throw new ProjectAlreadyExistException("Project with name '" + projectDetails.getName() + "' already exist");
         }
+
+        if (projectRepository.existsByZohoProjectId(projectDetails.getZohoProjectId())) {
+            throw new ProjectAlreadyExistException("Project with Zoho Id '" + projectDetails.getZohoProjectId() + "' already exist");
+        }
+
         String createdBy = SecurityContextHolder.getContext().getAuthentication().getName();
         LocalDateTime now = LocalDateTime.now();
 
@@ -126,11 +131,10 @@ public class ProjectService {
     public ProjectDetails updateProject(ProjectDetails projectDetails) {
 
         String projectName = projectDetails.getName();
-        Project project = projectRepository.findByName(projectName).orElseThrow(() -> new ResourceNotFoundException(projectName + " Project name not found"));
+        Project project = projectRepository.findByName(projectName).orElseThrow(() ->
+                new ResourceNotFoundException(projectName + " Project name not found")
+        );
 
-        if (projectRepository.existsByName(projectDetails.getName())) {
-            throw new ProjectAlreadyExistException("Project with name " + projectDetails.getName() + " already exist");
-        }
         String createdBy = SecurityContextHolder.getContext().getAuthentication().getName();
         LocalDateTime now = LocalDateTime.now();
 

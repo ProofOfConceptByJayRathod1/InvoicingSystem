@@ -17,4 +17,5 @@ public interface ProjectRepository extends JpaRepository<Project, Long> {
     Page<Project> searchProjectByName(String projectName, Pageable pageable);
 
     boolean existsByName(String name);
+    boolean existsByZohoProjectId(String zohoProjectId);
 }
