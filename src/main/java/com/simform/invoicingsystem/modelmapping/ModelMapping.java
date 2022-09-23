@@ -8,27 +8,31 @@ import com.simform.invoicingsystem.entity.Client;
 import com.simform.invoicingsystem.entity.Project;
 import com.simform.invoicingsystem.entity.Rate;
 import com.simform.invoicingsystem.entity.SalesPerson;
+import org.modelmapper.AbstractConverter;
 import org.modelmapper.ModelMapper;
 import org.modelmapper.PropertyMap;
+import org.modelmapper.TypeToken;
 
 import java.util.Collection;
 
 public class ModelMapping {
-
+    //TypeMap<Sal, UserListDTO> typeMap = modelMapper.createTypeMap(UserList.class, UserListDTO.class);
     private static final ModelMapper mapper = new ModelMapper();
 
     public static PropertyMap<Project, ProjectDetails> getProjectDetailsMapping() {
         return new PropertyMap<>() {
             protected void configure() {
-            //    map().setSalesPersons(salesPersons(source.getSalesPersons()));
-                //map().setTechStackRates(techStackRate(source.getRates()));
+              /*  map().setSalesPersons(mapper.addMappings(mapper -> {
+                }));*/
+                map().setCsm(source.getCsm().getName());
                 map().setClientDetails(clientDetails(source.getClient()));
             }
         };
     }
 
     public static Collection<String> salesPersons(Collection<SalesPerson> salesPeople) {
-        return salesPeople.stream().map(SalesPerson::getName).toList();
+        return mapper.map(salesPeople, new TypeToken<Collection<String>>() {
+        }.getType());
     }
 
     public static ClientDetails clientDetails(Client client) {
@@ -71,4 +75,15 @@ public class ModelMapping {
         };
     }
 
+}
+
+
+class SalesPersonListConverter extends AbstractConverter<Collection<SalesPerson>, Collection<String>> {
+    @Override
+    protected Collection<String> convert(Collection<SalesPerson> salesPersons) {
+        return salesPersons.stream()
+                .map(SalesPerson::getName)
+                .toList();
+
+    }
 }

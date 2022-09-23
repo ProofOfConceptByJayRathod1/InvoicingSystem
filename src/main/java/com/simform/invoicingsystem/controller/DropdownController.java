@@ -14,7 +14,7 @@ import org.springframework.web.bind.annotation.*;
 import java.time.LocalDateTime;
 import java.util.List;
 
-@CrossOrigin(originPatterns = "*")
+@CrossOrigin(originPatterns = {"*","http://localhost:3000/"})
 @Slf4j
 @RestController
 @RequestMapping("/get-data")

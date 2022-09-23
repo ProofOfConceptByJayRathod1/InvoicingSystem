@@ -29,7 +29,7 @@ public class ClientServiceTest {
     @InjectMocks
     private ClientService clientService;
 
-    @Test
+/*    @Test
     void addClientSuccess() {
         String email = "chris@gmail.com";
         ClientDetails clientDetails = new ClientDetails("Chris", "Company Name", email, "LA", "CA", "USA", "1528252585");
@@ -47,5 +47,5 @@ public class ClientServiceTest {
         verify(clientRepository, times(1)).findByEmail(any(String.class));
         verify(clientRepository, times(1)).save(client);
         verify(modelMapper, times(1)).map(clientDetails, Client.class);
-    }
+    }*/
 }

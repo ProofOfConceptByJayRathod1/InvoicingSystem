@@ -18,7 +18,7 @@ import java.util.Collection;
 import java.util.List;
 
 
-@CrossOrigin(originPatterns = "*")
+@CrossOrigin(originPatterns = {"*","http://localhost:3000/"})
 @RestController
 @RequestMapping("/projects/rates")
 @Slf4j

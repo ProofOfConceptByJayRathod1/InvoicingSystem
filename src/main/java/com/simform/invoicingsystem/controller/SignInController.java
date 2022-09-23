@@ -1,6 +1,7 @@
 package com.simform.invoicingsystem.controller;
 
 import com.simform.invoicingsystem.dto.GenericResponse;
+import com.simform.invoicingsystem.dto.JwtResponse;
 import com.simform.invoicingsystem.dto.SignInRequest;
 import com.simform.invoicingsystem.service.SignInService;
 import com.simform.invoicingsystem.util.EmptyJsonBody;
@@ -47,6 +48,24 @@ public class SignInController {
         log.info("SignIn successfully");
         log.debug("Exiting /sign-in end-point");
         GenericResponse genericResponse = new GenericResponse(true, "signed in successfully", new EmptyJsonBody(), 200, LocalDateTime.now());
+        return new ResponseEntity<>(genericResponse, HttpStatus.OK);
+    }
+
+
+    @Operation(summary = "Authenticate API", description = "Here, user have to enter username and password for Authentication purpose", tags = {"Sign In Controller"})
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "User logged successfully"),
+            @ApiResponse(responseCode = "404", description = "User not found"),
+            @ApiResponse(responseCode = "403", description = "Forbidden"),
+            @ApiResponse(responseCode = "401", description = "Unauthorized")
+    })
+    @PostMapping(value = "/authenticate")
+    public ResponseEntity<GenericResponse> generateToken(@RequestBody @Validated SignInRequest signInRequest, HttpServletResponse response) throws UsernameNotFoundException {
+        log.debug("Entering /authenticate end-point");
+        JwtResponse jwtResponse = signInService.generateToken(signInRequest);
+        log.info("Authenticated successfully");
+        log.debug("Exiting /authenticate end-point");
+        GenericResponse genericResponse = new GenericResponse(true, "authenticated successfully",jwtResponse, 200, LocalDateTime.now());
         return new ResponseEntity<>(genericResponse, HttpStatus.OK);
     }
 }

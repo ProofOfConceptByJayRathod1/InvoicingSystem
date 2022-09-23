@@ -124,7 +124,9 @@ public class ProjectService {
 
 
         project.setClient(clientService.addClient(projectDetails.getClientDetails()));
-        projectRepository.save(project);
+        project = projectRepository.save(project);
+        //set sale persons
+        projectDetails.setSalesPersons(project.getSalesPersons().stream().map(SalesPerson::getName).toList());
         return projectDetails;
     }
 
@@ -200,6 +202,8 @@ public class ProjectService {
                                 })
                 ).toList());
         project.setSalesPersons(salesPeople);
+        //set sale persons
+        projectDetails.setSalesPersons(project.getSalesPersons().stream().map(SalesPerson::getName).toList());
         projectRepository.save(project);
         return projectDetails;
     }
@@ -225,7 +229,9 @@ public class ProjectService {
         Project project = projectRepository.findByName(projectName).orElseThrow(() ->
                 new ResourceNotFoundException("Project with name " + projectName + " not found")
         );
-        return mapper.map(project, ProjectDetails.class);
+        ProjectDetails projectDetails = mapper.map(project, ProjectDetails.class);
+        projectDetails.setSalesPersons(project.getSalesPersons().stream().map(SalesPerson::getName).toList());
+        return projectDetails;
     }
 
     public ProjectDetailsViewUpdate updateProjectDetails(ProjectDetailsViewUpdate projectDetailsViewUpdate) {
