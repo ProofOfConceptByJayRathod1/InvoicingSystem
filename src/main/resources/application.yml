@@ -4,9 +4,9 @@ server:
 spring:
   datasource:
     driver-class-name: org.postgresql.Driver
-    url: jdbc:postgresql://localhost:5432/simform-invoicing-system?createDatabaseIfNotExist=true
-    username: postgres
-    password: Simform@123
+    url: jdbc:postgresql://ec2-52-200-5-135.compute-1.amazonaws.com:5432/dqgeqofomepoh?createDatabaseIfNotExist=true
+    username: kfvnvkrugmjvdu
+    password: 215be6b2575249c7f55d07457b7e21febbbf09ac47ce39984042a70993141e0c
   jpa:
     properties:
       hibernate:
